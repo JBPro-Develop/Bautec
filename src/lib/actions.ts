@@ -14,7 +14,6 @@ const NewPenSchema = z.object({
   arrivalDate: z.string().min(1, 'Arrival date is required.'),
   initialWeight: z.coerce.number().min(1, 'Initial weight is required.'),
   expectedShipDate: z.string().min(1, 'Expected ship date is required.'),
-  animalTags: z.string().optional(),
   recipeId: z.string().min(1, 'A recipe must be selected.'),
 });
 
@@ -103,6 +102,7 @@ export async function createCow(prevState: any, formData: FormData) {
         revalidatePath('/cows');
         if (newCow.penId) {
             revalidatePath(`/pens/${newCow.penId}/cows`);
+            revalidatePath(`/dashboard`);
         }
         return { message: `Successfully added cow ${validatedFields.data.tagId}.` };
     } catch (e: any) {

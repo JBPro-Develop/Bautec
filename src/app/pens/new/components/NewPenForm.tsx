@@ -115,11 +115,6 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
       </div>
       
       <div className="space-y-2">
-        <Label htmlFor="animalTags">Animal Tags (comma-separated)</Label>
-        <Textarea id="animalTags" name="animalTags" placeholder="A01, A02, A03..." />
-      </div>
-
-      <div className="space-y-2">
         <Label htmlFor="photo">Upload Photo</Label>
         <Input id="photo" name="photo" type="file" />
         <p className="text-xs text-muted-foreground">This is for display only and won't be uploaded.</p>
