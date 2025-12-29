@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import {
   Sidebar,
   SidebarHeader,
@@ -11,11 +14,28 @@ import {
   SidebarGroupLabel,
 } from '@/components/ui/sidebar';
 import { LayoutGrid, PlusCircle, BrainCircuit, Box, LifeBuoy, Settings, Spade } from 'lucide-react';
-import { getActivePens } from '@/lib/data';
 import { Separator } from './ui/separator';
+import { useEffect, useState } from 'react';
+import type { Pen } from '@/lib/types';
+import { getActivePens } from '@/lib/data';
 
-export default async function AppSidebar() {
-  const activePens = await getActivePens();
+export default function AppSidebar() {
+  const pathname = usePathname();
+  const [activePens, setActivePens] = useState<Pen[]>([]);
+
+  useEffect(() => {
+    async function fetchPens() {
+      const pens = await getActivePens();
+      setActivePens(pens);
+    }
+    fetchPens();
+  }, []);
+
+  const menuItems = [
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid, tooltip: 'Dashboard' },
+    { href: '/pens/new', label: 'New Pen / Group', icon: PlusCircle, tooltip: 'New Pen' },
+    { href: '/ai-insights', label: 'AI Feeding Insights', icon: BrainCircuit, tooltip: 'AI Insights' },
+  ];
 
   return (
     <Sidebar>
@@ -27,30 +47,16 @@ export default async function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="Dashboard">
-              <Link href="/dashboard">
-                <LayoutGrid />
-                <span>Dashboard</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="New Pen">
-              <Link href="/pens/new">
-                <PlusCircle />
-                <span>New Pen / Group</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-           <SidebarMenuItem>
-            <SidebarMenuButton asChild tooltip="AI Insights">
-              <Link href="/ai-insights">
-                <BrainCircuit />
-                <span>AI Feeding Insights</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          {menuItems.map((item) => (
+            <SidebarMenuItem key={item.href}>
+              <SidebarMenuButton asChild tooltip={item.tooltip} isActive={pathname === item.href}>
+                <Link href={item.href}>
+                  <item.icon />
+                  <span>{item.label}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
         </SidebarMenu>
         <Separator className="my-4" />
         <SidebarGroup>
@@ -58,7 +64,7 @@ export default async function AppSidebar() {
           <SidebarMenu>
             {activePens.map((pen) => (
               <SidebarMenuItem key={pen.id}>
-                <SidebarMenuButton asChild tooltip={pen.name}>
+                <SidebarMenuButton asChild tooltip={pen.name} isActive={pathname.startsWith(`/pens/${pen.id}`)}>
                   <Link href={`/pens/${pen.id}`}>
                     <Box />
                     <span>{pen.name}</span>
