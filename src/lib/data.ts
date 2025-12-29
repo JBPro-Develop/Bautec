@@ -90,7 +90,7 @@ export async function getCowsByPenId(penId: string): Promise<Cow[]> {
 }
 
 
-export async function addCow(cow: Cow) {
+export async function addCow(cow: Cow): Promise<Cow> {
     // Check if cow with same ID already exists
     if (cows.find(c => c.id.toLowerCase() === cow.id.toLowerCase())) {
         throw new Error('A cow with this Tag ID already exists.');

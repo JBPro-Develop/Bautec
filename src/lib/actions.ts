@@ -91,7 +91,7 @@ export async function createCow(prevState: any, formData: FormData) {
     }
     
     try {
-        await addCow({
+        const newCow = await addCow({
             id: validatedFields.data.tagId,
             weight: validatedFields.data.weight,
             birthDate: validatedFields.data.birthDate,
@@ -99,6 +99,9 @@ export async function createCow(prevState: any, formData: FormData) {
         });
 
         revalidatePath('/cows');
+        if (newCow.penId) {
+            revalidatePath(`/pens/${newCow.penId}/cows`);
+        }
         return { message: `Successfully added cow ${validatedFields.data.tagId}.` };
     } catch (e: any) {
         return { message: e.message, errors: {} };
