@@ -89,6 +89,11 @@ export async function getCows(query?: string): Promise<Cow[]> {
     return cows.filter(cow => cow.id.toLowerCase().includes(query.toLowerCase()));
 }
 
+export async function getCowsByPenId(penId: string): Promise<Cow[]> {
+    return cows.filter(cow => cow.penId === penId);
+}
+
+
 export async function addCow(cow: Cow) {
     // Check if cow with same ID already exists
     if (cows.find(c => c.id.toLowerCase() === cow.id.toLowerCase())) {

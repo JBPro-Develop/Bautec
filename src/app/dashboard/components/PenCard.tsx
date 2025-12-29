@@ -16,10 +16,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MoreVertical, Droplets, HeartPulse, Archive } from 'lucide-react';
-import { getFeedingRecordsForPen } from '@/lib/data';
+import { MoreVertical, Droplets, HeartPulse, Archive, Weight } from 'lucide-react';
+import { getFeedingRecordsForPen, getCowsByPenId } from '@/lib/data';
 import { formatDate } from '@/lib/utils';
 import type { Pen } from '@/lib/types';
+import { Separator } from '@/components/ui/separator';
 
 type PenCardProps = {
   pen: Pen & { recipeName: string };
@@ -28,6 +29,9 @@ type PenCardProps = {
 export default async function PenCard({ pen }: PenCardProps) {
   const feedingRecords = await getFeedingRecordsForPen(pen.id);
   const lastFed = feedingRecords.length > 0 ? formatDate(feedingRecords[0].date) : 'N/A';
+  const cowsInPen = await getCowsByPenId(pen.id);
+  const totalWeight = cowsInPen.reduce((sum, cow) => sum + cow.weight, 0);
+  const averageWeight = pen.headCount > 0 ? Math.round(totalWeight / pen.headCount) : 0;
 
   return (
     <Card className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
@@ -70,10 +74,17 @@ export default async function PenCard({ pen }: PenCardProps) {
           data-ai-hint={pen.photoHint}
         />
       </div>
-      <CardContent className="p-4 flex-1">
+      <CardContent className="p-4 flex-1 space-y-3">
         <div className="flex justify-between items-center text-sm text-muted-foreground">
           <span>Recipe:</span>
           <span className="font-medium text-foreground">{pen.recipeName}</span>
+        </div>
+        <div className="flex justify-between items-center text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+                <Weight className="h-4 w-4" />
+                <span>Avg. Weight:</span>
+            </div>
+          <span className="font-medium text-foreground">{averageWeight.toLocaleString()} lbs</span>
         </div>
       </CardContent>
       <CardFooter className="p-4 bg-secondary/50 flex justify-between text-sm">
