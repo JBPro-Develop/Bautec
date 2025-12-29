@@ -91,13 +91,13 @@ export default async function FeedingPage({ params }: { params: { id: string } }
               {feedingRecords.slice(0, 5).map(record => (
                 record.ingredients.map((ing, index) => (
                   <TableRow key={`${record.id}-${index}`}>
-                    {index === 0 &amp;&amp; <TableCell rowSpan={record.ingredients.length} className="align-top font-medium">{formatDate(record.date)}</TableCell>}
+                    {index === 0 && <TableCell rowSpan={record.ingredients.length} className="align-top font-medium">{formatDate(record.date)}</TableCell>}
                     <TableCell>{ing.name}</TableCell>
                     <TableCell className="text-right">{ing.actualWeight}</TableCell>
                   </TableRow>
                 ))
               ))}
-              {feedingRecords.length === 0 &amp;&amp; (
+              {feedingRecords.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={3} className="text-center">No feeding records found.</TableCell>
                 </TableRow>

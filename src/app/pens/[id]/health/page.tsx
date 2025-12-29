@@ -93,7 +93,7 @@ export default async function HealthPage({ params }: { params: { id: string } })
                 </TableCell>
               </TableRow>
             ))}
-            {healthRecords.length === 0 &amp;&amp; (
+            {healthRecords.length === 0 && (
               <TableRow>
                 <TableCell colSpan={5} className="text-center">No health records found.</TableCell>
               </TableRow>
