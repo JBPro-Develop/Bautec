@@ -41,12 +41,12 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
         <div className="space-y-2">
           <Label htmlFor="name">Pen Name / ID</Label>
           <Input id="name" name="name" placeholder="e.g., North Pasture" required />
-          {state.errors?.name &amp;&amp; <p className="text-sm text-destructive">{state.errors.name[0]}</p>}
+          {state.errors?.name && <p className="text-sm text-destructive">{state.errors.name[0]}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="headCount">Number of Head</Label>
           <Input id="headCount" name="headCount" type="number" placeholder="50" required />
-          {state.errors?.headCount &amp;&amp; <p className="text-sm text-destructive">{state.errors.headCount[0]}</p>}
+          {state.errors?.headCount && <p className="text-sm text-destructive">{state.errors.headCount[0]}</p>}
         </div>
       </div>
       
@@ -58,7 +58,7 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
             <PopoverTrigger asChild>
               <Button
                 variant={'outline'}
-                className={cn('w-full justify-start text-left font-normal', !arrivalDate &amp;&amp; 'text-muted-foreground')}
+                className={cn('w-full justify-start text-left font-normal', !arrivalDate && 'text-muted-foreground')}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {arrivalDate ? formatDate(arrivalDate) : <span>Pick a date</span>}
@@ -68,12 +68,12 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
               <Calendar mode="single" selected={arrivalDate} onSelect={setArrivalDate} initialFocus />
             </PopoverContent>
           </Popover>
-          {state.errors?.arrivalDate &amp;&amp; <p className="text-sm text-destructive">{state.errors.arrivalDate[0]}</p>}
+          {state.errors?.arrivalDate && <p className="text-sm text-destructive">{state.errors.arrivalDate[0]}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="initialWeight">Initial Average Weight (lbs)</Label>
           <Input id="initialWeight" name="initialWeight" type="number" placeholder="300" required />
-          {state.errors?.initialWeight &amp;&amp; <p className="text-sm text-destructive">{state.errors.initialWeight[0]}</p>}
+          {state.errors?.initialWeight && <p className="text-sm text-destructive">{state.errors.initialWeight[0]}</p>}
         </div>
       </div>
 
@@ -85,7 +85,7 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
             <PopoverTrigger asChild>
               <Button
                 variant={'outline'}
-                className={cn('w-full justify-start text-left font-normal', !shipDate &amp;&amp; 'text-muted-foreground')}
+                className={cn('w-full justify-start text-left font-normal', !shipDate && 'text-muted-foreground')}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {shipDate ? formatDate(shipDate) : <span>Pick a date</span>}
@@ -95,7 +95,7 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
               <Calendar mode="single" selected={shipDate} onSelect={setShipDate} initialFocus />
             </PopoverContent>
           </Popover>
-           {state.errors?.expectedShipDate &amp;&amp; <p className="text-sm text-destructive">{state.errors.expectedShipDate[0]}</p>}
+           {state.errors?.expectedShipDate && <p className="text-sm text-destructive">{state.errors.expectedShipDate[0]}</p>}
         </div>
          <div className="space-y-2">
           <Label htmlFor="recipeId">Select Recipe</Label>
@@ -109,7 +109,7 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
               ))}
             </SelectContent>
           </Select>
-           {state.errors?.recipeId &amp;&amp; <p className="text-sm text-destructive">{state.errors.recipeId[0]}</p>}
+           {state.errors?.recipeId && <p className="text-sm text-destructive">{state.errors.recipeId[0]}</p>}
         </div>
       </div>
       
