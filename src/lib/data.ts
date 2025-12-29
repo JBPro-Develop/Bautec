@@ -1,5 +1,6 @@
 import type { Pen, Recipe, FeedingRecord, HealthRecord, Cow, Ingredient } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { z } from 'zod';
 
 export let recipes: Recipe[] = [
   { id: 'rec1', name: 'Recipe A', ingredients: [{ name: 'Corn', targetWeight: 50 }, { name: 'Soybean Meal', targetWeight: 25 }, { name: 'Hay', targetWeight: 25 }] },
@@ -77,31 +78,42 @@ export async function addPen(penData: Omit<Pen, 'id' | 'photoUrl' | 'photoHint' 
 }
 
 export async function addRecipe(formData: FormData) {
-  const recipeName = formData.get('recipeName') as string;
-  if (!recipeName) throw new Error('Recipe name is required.');
+    const RecipeSchema = z.object({
+        recipeName: z.string().min(1, 'Recipe name is required.'),
+        ingredients: z.array(z.object({
+            name: z.string().min(1, 'Ingredient name is required.'),
+            targetWeight: z.coerce.number().positive('Weight must be positive.'),
+        })).min(1, 'At least one ingredient is required.'),
+    });
 
-  const ingredients: Ingredient[] = [];
-  let i = 0;
-  while (formData.has(`ingredientName-${i}`)) {
-    const name = formData.get(`ingredientName-${i}`) as string;
-    const targetWeight = formData.get(`ingredientWeight-${i}`) as string;
-
-    if (name && targetWeight) {
-      ingredients.push({ name, targetWeight: parseFloat(targetWeight) });
+    const ingredients: { name: string; targetWeight: number }[] = [];
+    let i = 0;
+    while (formData.has(`ingredientName-${i}`)) {
+        const name = formData.get(`ingredientName-${i}`) as string;
+        const targetWeight = formData.get(`ingredientWeight-${i}`) as string;
+        if (name || targetWeight) {
+            ingredients.push({ name, targetWeight: parseFloat(targetWeight) });
+        }
+        i++;
     }
-    i++;
-  }
-  
-  if(ingredients.length === 0) throw new Error('At least one ingredient is required.');
 
-  const newRecipe: Recipe = {
-    id: `rec${recipes.length + 1}`,
-    name: recipeName,
-    ingredients,
-  };
+    const validatedData = RecipeSchema.safeParse({
+        recipeName: formData.get('recipeName'),
+        ingredients,
+    });
 
-  recipes.push(newRecipe);
-  return newRecipe;
+    if (!validatedData.success) {
+        throw validatedData.error;
+    }
+    
+    const newRecipe: Recipe = {
+        id: `rec${recipes.length + 1}`,
+        name: validatedData.data.recipeName,
+        ingredients: validatedData.data.ingredients,
+    };
+
+    recipes.push(newRecipe);
+    return newRecipe;
 }
 
 export async function getFeedingRecordsForPen(penId: string) {
