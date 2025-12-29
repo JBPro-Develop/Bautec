@@ -44,6 +44,7 @@ export const feedingRecords: FeedingRecord[] = [
 export const healthRecords: HealthRecord[] = [
   { id: 'health1', penId: 'pen1', cowTag: 'A101', treatmentDate: '2024-04-15', drugName: 'Ivermectin', dosage: '10ml', reminderDays: 60 },
   { id: 'health2', penId: 'pen2', cowTag: 'B205', treatmentDate: '2024-05-01', drugName: 'Penicillin', dosage: '5ml', reminderDays: 90 },
+  { id: 'health3', penId: 'pen1', cowTag: 'A101', treatmentDate: '2024-02-10', drugName: 'Multimin', dosage: '8ml' },
 ];
 
 // Data access functions
@@ -64,18 +65,19 @@ export async function getRecipes() {
 }
 
 export async function addPen(penData: Omit<Pen, 'id' | 'photoUrl' | 'photoHint' | 'status'>) {
-    const newId = `pen${pens.length + 1}`;
-    const nextImageIndex = pens.length % PlaceHolderImages.length;
-    const newPen: Pen = {
-        id: newId,
-        ...penData,
-        photoUrl: PlaceHolderImages[nextImageIndex].imageUrl,
-        photoHint: PlaceHolderImages[nextImageIndex].imageHint,
-        status: 'Active',
-    };
-    pens.unshift(newPen);
-    return newPen;
+  const newId = `pen${pens.length + 1}`;
+  const nextImageIndex = pens.length % PlaceHolderImages.length;
+  const newPen: Pen = {
+      id: newId,
+      ...penData,
+      photoUrl: PlaceHolderImages[nextImageIndex].imageUrl,
+      photoHint: PlaceHolderImages[nextImageIndex].imageHint,
+      status: 'Active',
+  };
+  pens.unshift(newPen);
+  return newPen;
 }
+
 
 export async function addRecipe(formData: FormData) {
     const RecipeSchema = z.object({
@@ -122,6 +124,10 @@ export async function getFeedingRecordsForPen(penId: string) {
 
 export async function getHealthRecordsForPen(penId: string) {
     return healthRecords.filter(record => record.penId === penId).sort((a, b) => new Date(b.treatmentDate).getTime() - new Date(a.treatmentDate).getTime());
+}
+
+export async function getHealthRecordsForCow(cowId: string) {
+    return healthRecords.filter(record => record.cowTag === cowId).sort((a, b) => new Date(b.treatmentDate).getTime() - new Date(a.treatmentDate).getTime());
 }
 
 export async function getCowById(id: string): Promise<Cow | undefined> {

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -14,7 +15,7 @@ import {
   SidebarGroupLabel,
   useSidebar,
 } from '@/components/ui/sidebar';
-import { LayoutGrid, PlusCircle, CookingPot, Box, LifeBuoy, Settings, Spade, User, Wheat } from 'lucide-react';
+import { LayoutGrid, PlusCircle, CookingPot, Box, LifeBuoy, Settings, Spade, User, Wheat, HeartPulse } from 'lucide-react';
 import { Separator } from './ui/separator';
 import { useMemo } from 'react';
 import type { Pen } from '@/lib/types';
@@ -35,6 +36,7 @@ export default function AppSidebar({ pens }: { pens: Pen[] }) {
   const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid, tooltip: 'Dashboard' },
     { href: '/feeding', label: 'Feeding', icon: Wheat, tooltip: 'Feeding' },
+    { href: '/health', label: 'Health', icon: HeartPulse, tooltip: 'Health' },
     { href: '/recipes', label: 'Recipes', icon: CookingPot, tooltip: 'Recipes' },
     { href: '/pens/new', label: 'New Pen / Group', icon: PlusCircle, tooltip: 'New Pen' },
     { href: '/cows', label: 'Cow Lookup', icon: User, tooltip: 'Cow Lookup' },
