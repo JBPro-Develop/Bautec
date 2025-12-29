@@ -12,7 +12,6 @@ const NewPenSchema = z.object({
   name: z.string().min(1, 'Pen name is required.'),
   headCount: z.coerce.number().min(1, 'Number of heads must be at least 1.'),
   arrivalDate: z.string().min(1, 'Arrival date is required.'),
-  initialWeight: z.coerce.number().min(1, 'Initial weight is required.'),
   expectedShipDate: z.string().min(1, 'Expected ship date is required.'),
   recipeId: z.string().min(1, 'A recipe must be selected.'),
 });

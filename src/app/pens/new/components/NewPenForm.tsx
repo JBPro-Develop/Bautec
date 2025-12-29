@@ -72,33 +72,27 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
           {state.errors?.arrivalDate && <p className="text-sm text-destructive">{state.errors.arrivalDate[0]}</p>}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="initialWeight">Initial Average Weight (lbs)</Label>
-          <Input id="initialWeight" name="initialWeight" type="number" placeholder="300" required />
-          {state.errors?.initialWeight && <p className="text-sm text-destructive">{state.errors.initialWeight[0]}</p>}
+            <Label>Expected Ship Date</Label>
+            <Input type="hidden" name="expectedShipDate" value={shipDate?.toISOString()} />
+            <Popover>
+                <PopoverTrigger asChild>
+                <Button
+                    variant={'outline'}
+                    className={cn('w-full justify-start text-left font-normal', !shipDate && 'text-muted-foreground')}
+                >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {shipDate ? formatDate(shipDate) : <span>Pick a date</span>}
+                </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                <Calendar mode="single" selected={shipDate} onSelect={setShipDate} initialFocus />
+                </PopoverContent>
+            </Popover>
+            {state.errors?.expectedShipDate && <p className="text-sm text-destructive">{state.errors.expectedShipDate[0]}</p>}
         </div>
       </div>
 
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label>Expected Ship Date</Label>
-          <Input type="hidden" name="expectedShipDate" value={shipDate?.toISOString()} />
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant={'outline'}
-                className={cn('w-full justify-start text-left font-normal', !shipDate && 'text-muted-foreground')}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {shipDate ? formatDate(shipDate) : <span>Pick a date</span>}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar mode="single" selected={shipDate} onSelect={setShipDate} initialFocus />
-            </PopoverContent>
-          </Popover>
-           {state.errors?.expectedShipDate && <p className="text-sm text-destructive">{state.errors.expectedShipDate[0]}</p>}
-        </div>
-         <div className="space-y-2">
+       <div className="space-y-2">
           <Label htmlFor="recipeId">Select Recipe</Label>
           <Select name="recipeId" required>
             <SelectTrigger>
@@ -112,7 +106,6 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
           </Select>
            {state.errors?.recipeId && <p className="text-sm text-destructive">{state.errors.recipeId[0]}</p>}
         </div>
-      </div>
       
       <div className="space-y-2">
         <Label htmlFor="photo">Upload Photo</Label>

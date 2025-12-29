@@ -19,13 +19,11 @@ export type Cow = {
 };
 
 export type Pen = {
-  id: string;
+  id:string;
   name: string;
   headCount: number;
   arrivalDate: string;
-  initialWeight: number;
   expectedShipDate: string;
-  animalTags: string[];
   recipeId: string;
   photoUrl: string;
   photoHint: string;

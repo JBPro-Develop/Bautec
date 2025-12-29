@@ -9,23 +9,19 @@ export const recipes: Recipe[] = [
 
 export let pens: Pen[] = [
   { 
-    id: 'pen1', name: 'North Field Pen', headCount: 50, arrivalDate: '2023-10-01', initialWeight: 300, expectedShipDate: '2024-06-01', 
-    animalTags: Array.from({ length: 50 }, (_, i) => `A${100 + i}`), 
+    id: 'pen1', name: 'North Field Pen', headCount: 50, arrivalDate: '2023-10-01', expectedShipDate: '2024-06-01', 
     recipeId: 'rec1', photoUrl: PlaceHolderImages[0].imageUrl, photoHint: PlaceHolderImages[0].imageHint, status: 'Active' 
   },
   { 
-    id: 'pen2', name: 'East Valley Group', headCount: 75, arrivalDate: '2023-11-15', initialWeight: 280, expectedShipDate: '2024-07-15', 
-    animalTags: Array.from({ length: 75 }, (_, i) => `B${200 + i}`), 
+    id: 'pen2', name: 'East Valley Group', headCount: 75, arrivalDate: '2023-11-15', expectedShipDate: '2024-07-15', 
     recipeId: 'rec2', photoUrl: PlaceHolderImages[1].imageUrl, photoHint: PlaceHolderImages[1].imageHint, status: 'Active' 
   },
   { 
-    id: 'pen3', name: 'South Hill Pasture', headCount: 40, arrivalDate: '2023-09-01', initialWeight: 320, expectedShipDate: '2024-03-01', 
-    animalTags: Array.from({ length: 40 }, (_, i) => `C${300 + i}`), 
+    id: 'pen3', name: 'South Hill Pasture', headCount: 40, arrivalDate: '2023-09-01', expectedShipDate: '2024-03-01', 
     recipeId: 'rec3', photoUrl: PlaceHolderImages[2].imageUrl, photoHint: PlaceHolderImages[2].imageHint, status: 'Closed' 
   },
   { 
-    id: 'pen4', name: 'West Creek Corral', headCount: 60, arrivalDate: '2024-01-10', initialWeight: 290, expectedShipDate: '2024-09-10', 
-    animalTags: Array.from({ length: 60 }, (_, i) => `D${400 + i}`), 
+    id: 'pen4', name: 'West Creek Corral', headCount: 60, arrivalDate: '2024-01-10', expectedShipDate: '2024-09-10', 
     recipeId: 'rec1', photoUrl: PlaceHolderImages[3].imageUrl, photoHint: PlaceHolderImages[3].imageHint, status: 'Active' 
   },
 ];
@@ -106,11 +102,10 @@ export async function addCow(cow: Omit<Cow, 'photoUrl' | 'photoHint'>): Promise<
 
     cows.push(newCow);
 
-    // If a pen is assigned, add the cow's tag and increment headCount
+    // If a pen is assigned, update headCount
     if (newCow.penId) {
         const penIndex = pens.findIndex(p => p.id === newCow.penId);
         if (penIndex !== -1) {
-            pens[penIndex].animalTags.push(newCow.id);
             pens[penIndex].headCount++;
         }
     }

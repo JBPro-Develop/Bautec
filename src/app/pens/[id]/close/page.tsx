@@ -1,4 +1,4 @@
-import { getPenById } from '@/lib/data';
+import { getPenById, getCowsByPenId } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -10,10 +10,13 @@ import { FileDown, FileText } from 'lucide-react';
 export default async function CloseGroupPage({ params }: { params: { id: string } }) {
   const pen = await getPenById(params.id);
   if (!pen) notFound();
+  
+  const cows = await getCowsByPenId(pen.id);
+  const initialTotalWeight = cows.reduce((sum, cow) => sum + cow.weight, 0);
 
   // Dummy data for report
-  const finalWeight = pen.initialWeight * pen.headCount * 1.8;
-  const totalGain = finalWeight - (pen.initialWeight * pen.headCount);
+  const finalWeight = initialTotalWeight * 1.8;
+  const totalGain = finalWeight - (initialTotalWeight);
   const feedUsed = totalGain * 2.5;
   const feedConversionRatio = feedUsed / totalGain;
   const feedCost = feedUsed * 0.15;
