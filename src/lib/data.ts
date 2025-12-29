@@ -62,6 +62,20 @@ export async function getRecipes() {
     return recipes;
 }
 
+export async function addPen(penData: Omit<Pen, 'id' | 'photoUrl' | 'photoHint' | 'status'>) {
+    const newId = `pen${pens.length + 1}`;
+    const nextImageIndex = pens.length % PlaceHolderImages.length;
+    const newPen: Pen = {
+        id: newId,
+        ...penData,
+        photoUrl: PlaceHolderImages[nextImageIndex].imageUrl,
+        photoHint: PlaceHolderImages[nextImageIndex].imageHint,
+        status: 'Active',
+    };
+    pens.unshift(newPen);
+    return newPen;
+}
+
 export async function addRecipe(formData: FormData) {
   const recipeName = formData.get('recipeName') as string;
   if (!recipeName) throw new Error('Recipe name is required.');

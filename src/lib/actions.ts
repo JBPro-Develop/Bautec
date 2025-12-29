@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { optimizeFeedingRecipe } from '@/ai/flows/feeding-recipe-optimization';
 import type { OptimizeFeedingRecipeOutput } from '@/ai/flows/feeding-recipe-optimization';
-import { addCow, addRecipe, addPen } from './data';
+import { addCow, addRecipe, addPen } from '@/lib/data';
 
 const NewPenSchema = z.object({
   name: z.string().min(1, 'Pen name is required.'),
@@ -109,7 +109,7 @@ export async function createCow(prevState: any, formData: FormData) {
             revalidatePath(`/dashboard`);
         }
         return { message: `Successfully added cow ${validatedFields.data.tagId}.` };
-    } catch (e: any) {
+    } catch (e: any) => {
         return { message: e.message, errors: {} };
     }
 }
