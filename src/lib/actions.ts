@@ -109,7 +109,7 @@ export async function createCow(prevState: any, formData: FormData) {
             revalidatePath(`/dashboard`);
         }
         return { message: `Successfully added cow ${validatedFields.data.tagId}.` };
-    } catch (e: any) => {
+    } catch (e: any) {
         return { message: e.message, errors: {} };
     }
 }
