@@ -95,14 +95,14 @@ export default function OptimizeForm() {
         <SubmitButton />
       </form>
 
-      {state.error &amp;&amp; (
+      {state.error && (
         <Alert variant="destructive">
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{state.error}</AlertDescription>
         </Alert>
       )}
 
-      {state.response &amp;&amp; (
+      {state.response && (
         <Card className="bg-accent/50 animate-in fade-in-50 duration-500">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
