@@ -56,7 +56,7 @@ export default function AddCowSection({ pens }: { pens: Pen[] }) {
         </div>
         <div className="space-y-2">
             <Label>Birth Date</Label>
-             <Input type="hidden" name="birthDate" value={birthDate?.toISOString()} />
+             <Input type="hidden" name="birthDate" value={birthDate?.toISOString() || ''} />
              <Popover>
                 <PopoverTrigger asChild>
                 <Button
