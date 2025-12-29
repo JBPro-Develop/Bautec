@@ -54,10 +54,6 @@ export async function getPens() {
   return pens;
 }
 
-export async function getActivePens() {
-    return pens.filter(pen => pen.status === 'Active');
-}
-
 export async function getPenById(id: string) {
   return pens.find(pen => pen.id === id);
 }

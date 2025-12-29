@@ -18,17 +18,21 @@ import { LayoutGrid, PlusCircle, CookingPot, Box, LifeBuoy, Settings, Spade, Use
 import { Separator } from './ui/separator';
 import { useEffect, useState } from 'react';
 import type { Pen } from '@/lib/types';
-import { getActivePens } from '@/lib/data';
+import { getPens } from '@/lib/data';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
+import { ChevronDown } from 'lucide-react';
 
 export default function AppSidebar() {
   const pathname = usePathname();
   const [activePens, setActivePens] = useState<Pen[]>([]);
+  const [closedPens, setClosedPens] = useState<Pen[]>([]);
   const { isMobile, setOpenMobile } = useSidebar();
 
   useEffect(() => {
     async function fetchPens() {
-      const pens = await getActivePens();
-      setActivePens(pens);
+      const pens = await getPens();
+      setActivePens(pens.filter(p => p.status === 'Active'));
+      setClosedPens(pens.filter(p => p.status === 'Closed'));
     }
     fetchPens();
   }, []);
@@ -90,6 +94,33 @@ export default function AppSidebar() {
             ))}
           </SidebarMenu>
         </SidebarGroup>
+        
+        {closedPens.length > 0 && (
+          <Collapsible>
+            <SidebarGroup>
+                <CollapsibleTrigger className="w-full">
+                    <SidebarGroupLabel className="flex items-center justify-between cursor-pointer w-full group-data-[collapsible=icon]:hidden">
+                        <span>Closed Pens</span>
+                        <ChevronDown className="h-4 w-4 transition-transform [&[data-state=open]]:rotate-180" />
+                    </SidebarGroupLabel>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                    <SidebarMenu className="mt-2">
+                        {closedPens.map((pen) => (
+                        <SidebarMenuItem key={pen.id}>
+                            <SidebarMenuButton asChild tooltip={pen.name} isActive={pathname.startsWith(`/pens/${pen.id}`)}>
+                            <Link href={`/pens/${pen.id}`} onClick={handleLinkClick}>
+                                <Box />
+                                <span>{pen.name}</span>
+                            </Link>
+                            </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </CollapsibleContent>
+            </SidebarGroup>
+          </Collapsible>
+        )}
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu>
