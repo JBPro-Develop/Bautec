@@ -1,7 +1,7 @@
-import type { Pen, Recipe, FeedingRecord, HealthRecord, Cow } from '@/lib/types';
+import type { Pen, Recipe, FeedingRecord, HealthRecord, Cow, Ingredient } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
-export const recipes: Recipe[] = [
+export let recipes: Recipe[] = [
   { id: 'rec1', name: 'Recipe A', ingredients: [{ name: 'Corn', targetWeight: 50 }, { name: 'Soybean Meal', targetWeight: 25 }, { name: 'Hay', targetWeight: 25 }] },
   { id: 'rec2', name: 'Recipe B', ingredients: [{ name: 'Barley', targetWeight: 60 }, { name: 'Corn Gluten', targetWeight: 20 }, { name: 'Molasses', targetWeight: 20 }] },
   { id: 'rec3', name: 'Recipe C', ingredients: [{ name: 'Grass Hay', targetWeight: 70 }, { name: 'Alfalfa', targetWeight: 20 }, { name: 'Mineral Salt', targetWeight: 10 }] },
@@ -62,6 +62,34 @@ export async function getRecipes() {
     return recipes;
 }
 
+export async function addRecipe(formData: FormData) {
+  const recipeName = formData.get('recipeName') as string;
+  if (!recipeName) throw new Error('Recipe name is required.');
+
+  const ingredients: Ingredient[] = [];
+  let i = 0;
+  while (formData.has(`ingredientName-${i}`)) {
+    const name = formData.get(`ingredientName-${i}`) as string;
+    const targetWeight = formData.get(`ingredientWeight-${i}`) as string;
+
+    if (name && targetWeight) {
+      ingredients.push({ name, targetWeight: parseFloat(targetWeight) });
+    }
+    i++;
+  }
+  
+  if(ingredients.length === 0) throw new Error('At least one ingredient is required.');
+
+  const newRecipe: Recipe = {
+    id: `rec${recipes.length + 1}`,
+    name: recipeName,
+    ingredients,
+  };
+
+  recipes.push(newRecipe);
+  return newRecipe;
+}
+
 export async function getFeedingRecordsForPen(penId: string) {
   return feedingRecords.filter(record => record.penId === penId).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
@@ -100,7 +128,7 @@ export async function addCow(cow: Omit<Cow, 'photoUrl' | 'photoHint'>): Promise<
         photoHint: PlaceHolderImages[nextImageIndex].imageHint,
     }
 
-    cows.push(newCow);
+    cows.unshift(newCow);
 
     // If a pen is assigned, update headCount
     if (newCow.penId) {

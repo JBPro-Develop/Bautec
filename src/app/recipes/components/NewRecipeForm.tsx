@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useState, useEffect } from 'react';
+import { useActionState, useState, useEffect, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 import { createRecipe } from '@/lib/actions';
 import { Button } from '@/components/ui/button';
@@ -19,9 +19,10 @@ function SubmitButton() {
 }
 
 export default function NewRecipeForm() {
-  const initialState = { message: null };
+  const initialState = { message: null, errors: {} };
   const [state, formAction] = useActionState(createRecipe, initialState);
   const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
 
   const [ingredients, setIngredients] = useState([{ name: '', targetWeight: '' }]);
 
@@ -41,18 +42,22 @@ export default function NewRecipeForm() {
   };
   
   useEffect(() => {
-    if (state?.message) {
+    if (state?.message && !state.errors) {
       toast({ title: "Success!", description: state.message });
       setIngredients([{ name: '', targetWeight: '' }]);
-      // Ideally reset the whole form here
+      formRef.current?.reset();
+    } else if (state?.message && state.errors) {
+        const errorMessages = Object.values(state.errors).flat().join(' ');
+        toast({ variant: 'destructive', title: "Error", description: errorMessages || state.message });
     }
   }, [state, toast]);
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form ref={formRef} action={formAction} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="recipeName">Recipe Name</Label>
         <Input id="recipeName" name="recipeName" placeholder="e.g., High-Energy Finisher" required />
+        {state.errors?.recipeName && <p className="text-sm text-destructive">{state.errors.recipeName[0]}</p>}
       </div>
 
       <div>
@@ -81,6 +86,7 @@ export default function NewRecipeForm() {
                 </Button>
             </div>
         ))}
+         {state.errors?.ingredients && <p className="text-sm text-destructive">{state.errors.ingredients[0]}</p>}
         </div>
         <Button type="button" variant="outline" size="sm" onClick={addIngredient} className="mt-2">
             <PlusCircle className="mr-2 h-4 w-4" /> Add Ingredient

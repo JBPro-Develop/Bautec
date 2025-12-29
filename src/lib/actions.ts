@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { optimizeFeedingRecipe } from '@/ai/flows/feeding-recipe-optimization';
 import type { OptimizeFeedingRecipeOutput } from '@/ai/flows/feeding-recipe-optimization';
-import { addCow } from './data';
+import { addCow, addRecipe } from './data';
 
 const NewPenSchema = z.object({
   name: z.string().min(1, 'Pen name is required.'),
@@ -109,12 +109,28 @@ export async function createCow(prevState: any, formData: FormData) {
     }
 }
 
+const RecipeSchema = z.object({
+  recipeName: z.string().min(1, 'Recipe name is required.'),
+  ingredients: z.array(z.object({
+    name: z.string().min(1, 'Ingredient name is required.'),
+    targetWeight: z.coerce.number().positive('Weight must be a positive number.'),
+  })).min(1, 'At least one ingredient is required.'),
+});
+
 export async function createRecipe(prevState: any, formData: FormData) {
-  // In a real app, you would save this to a database
-  console.log('New Recipe Data:', Object.fromEntries(formData.entries()));
-  revalidatePath('/recipes');
-  // We won't redirect, so the user can see the new recipe in the list
-  return { message: 'Recipe created successfully!' };
+  try {
+    await addRecipe(formData);
+    revalidatePath('/recipes');
+    return { message: 'Recipe created successfully!' };
+  } catch (e: any) {
+    if (e instanceof z.ZodError) {
+      return {
+        errors: e.flatten().fieldErrors,
+        message: 'Failed to create recipe. Please check the fields.',
+      };
+    }
+    return { message: e.message || 'An unknown error occurred.', errors: {} };
+  }
 }
 
 export async function trackFeeding(prevState: any, formData: FormData) {
