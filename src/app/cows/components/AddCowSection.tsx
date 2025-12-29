@@ -90,6 +90,12 @@ export default function AddCowSection({ pens }: { pens: Pen[] }) {
         </Select>
         {state.errors?.penId && <p className="text-sm text-destructive">{state.errors.penId[0]}</p>}
       </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="photo">Upload Photo</Label>
+        <Input id="photo" name="photo" type="file" />
+        <p className="text-xs text-muted-foreground">This is for display only and won't be uploaded.</p>
+      </div>
 
       <SubmitButton />
     </form>

@@ -14,6 +14,8 @@ export type Cow = {
   penId: string | null;
   weight: number;
   birthDate: string;
+  photoUrl?: string;
+  photoHint?: string;
 };
 
 export type Pen = {

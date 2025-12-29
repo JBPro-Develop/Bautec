@@ -31,9 +31,9 @@ export let pens: Pen[] = [
 ];
 
 export let cows: Cow[] = [
-    ...Array.from({ length: 50 }, (_, i) => ({ id: `A${100 + i}`, penId: 'pen1', weight: 450 + i * 2, birthDate: '2023-04-01' })),
-    ...Array.from({ length: 75 }, (_, i) => ({ id: `B${200 + i}`, penId: 'pen2', weight: 420 + i * 1.5, birthDate: '2023-05-15' })),
-    ...Array.from({ length: 60 }, (_, i) => ({ id: `D${400 + i}`, penId: 'pen4', weight: 430 + i * 2.5, birthDate: '2023-08-10' })),
+    ...Array.from({ length: 50 }, (_, i) => ({ id: `A${100 + i}`, penId: 'pen1', weight: 450 + i * 2, birthDate: '2023-04-01', photoUrl: PlaceHolderImages[i % 5].imageUrl, photoHint: PlaceHolderImages[i % 5].imageHint })),
+    ...Array.from({ length: 75 }, (_, i) => ({ id: `B${200 + i}`, penId: 'pen2', weight: 420 + i * 1.5, birthDate: '2023-05-15', photoUrl: PlaceHolderImages[i % 5].imageUrl, photoHint: PlaceHolderImages[i % 5].imageHint })),
+    ...Array.from({ length: 60 }, (_, i) => ({ id: `D${400 + i}`, penId: 'pen4', weight: 430 + i * 2.5, birthDate: '2023-08-10', photoUrl: PlaceHolderImages[i % 5].imageUrl, photoHint: PlaceHolderImages[i % 5].imageHint })),
 ];
 
 
@@ -95,6 +95,11 @@ export async function addCow(cow: Cow) {
     if (cows.find(c => c.id.toLowerCase() === cow.id.toLowerCase())) {
         throw new Error('A cow with this Tag ID already exists.');
     }
+    // Assign a placeholder image for now
+    const nextImageIndex = cows.length % PlaceHolderImages.length;
+    cow.photoUrl = PlaceHolderImages[nextImageIndex].imageUrl;
+    cow.photoHint = PlaceHolderImages[nextImageIndex].imageHint;
+
     cows.push(cow);
 
     // If a pen is assigned, add the cow's tag to the pen
