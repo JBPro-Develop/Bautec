@@ -90,25 +90,29 @@ export async function getCowsByPenId(penId: string): Promise<Cow[]> {
 }
 
 
-export async function addCow(cow: Cow): Promise<Cow> {
+export async function addCow(cow: Omit<Cow, 'photoUrl' | 'photoHint'>): Promise<Cow> {
     // Check if cow with same ID already exists
     if (cows.find(c => c.id.toLowerCase() === cow.id.toLowerCase())) {
         throw new Error('A cow with this Tag ID already exists.');
     }
+    
     // Assign a placeholder image for now
     const nextImageIndex = cows.length % PlaceHolderImages.length;
-    cow.photoUrl = PlaceHolderImages[nextImageIndex].imageUrl;
-    cow.photoHint = PlaceHolderImages[nextImageIndex].imageHint;
+    const newCow: Cow = {
+        ...cow,
+        photoUrl: PlaceHolderImages[nextImageIndex].imageUrl,
+        photoHint: PlaceHolderImages[nextImageIndex].imageHint,
+    }
 
-    cows.push(cow);
+    cows.push(newCow);
 
     // If a pen is assigned, add the cow's tag and increment headCount
-    if (cow.penId) {
-        const penIndex = pens.findIndex(p => p.id === cow.penId);
+    if (newCow.penId) {
+        const penIndex = pens.findIndex(p => p.id === newCow.penId);
         if (penIndex !== -1) {
-            pens[penIndex].animalTags.push(cow.id);
+            pens[penIndex].animalTags.push(newCow.id);
             pens[penIndex].headCount++;
         }
     }
-    return cow;
+    return newCow;
 }

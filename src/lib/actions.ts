@@ -73,6 +73,7 @@ const AddCowSchema = z.object({
   weight: z.coerce.number().positive('Weight must be a positive number.'),
   birthDate: z.string().min(1, 'Birth date is required.'),
   penId: z.string().nullable(),
+  photo: z.any().optional(),
 });
 
 export async function createCow(prevState: any, formData: FormData) {
@@ -81,6 +82,7 @@ export async function createCow(prevState: any, formData: FormData) {
         weight: formData.get('weight'),
         birthDate: formData.get('birthDate'),
         penId: formData.get('penId') === 'null' ? null : formData.get('penId'),
+        photo: formData.get('photo')
     });
 
     if (!validatedFields.success) {
