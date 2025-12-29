@@ -75,8 +75,10 @@ export default function CowList({ cows }: CowListProps) {
             <DialogContent className="sm:max-w-2xl">
                 <DialogHeader>
                     <DialogTitle>Health Records for {selectedCow.id}</DialogTitle>
-                    <DialogDescription>
+                    <DialogDescription asChild>
+                      <div className="text-sm text-muted-foreground">
                         Currently in <Badge variant="outline">{selectedCow.penName}</Badge>. A complete history of all health events.
+                      </div>
                     </DialogDescription>
                 </DialogHeader>
                 <div className="max-h-[60vh] overflow-y-auto">
