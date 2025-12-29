@@ -1,6 +1,6 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState, useFormStatus } from 'react-dom';
 import { getFeedingRecommendation, type AIFormState } from '@/lib/actions';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -35,7 +35,7 @@ function SubmitButton() {
 }
 
 export default function OptimizeForm() {
-  const [state, formAction] = useFormState(getFeedingRecommendation, initialState);
+  const [state, formAction] = useActionState(getFeedingRecommendation, initialState);
 
   return (
     <div className="space-y-8">

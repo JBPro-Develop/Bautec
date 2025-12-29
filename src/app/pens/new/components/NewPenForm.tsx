@@ -1,6 +1,7 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
+import { useActionState } from 'react';
+import { useFormStatus } from 'react-dom';
 import { createPen } from '@/lib/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,7 +31,7 @@ function SubmitButton() {
 
 export default function NewPenForm({ recipes }: NewPenFormProps) {
   const initialState = { errors: {} };
-  const [state, dispatch] = useFormState(createPen, initialState);
+  const [state, dispatch] = useActionState(createPen, initialState);
 
   const [arrivalDate, setArrivalDate] = useState<Date>();
   const [shipDate, setShipDate] = useState<Date>();
