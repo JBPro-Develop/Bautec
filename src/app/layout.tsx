@@ -8,17 +8,19 @@ import {
 import AppSidebar from '@/components/AppSidebar';
 import AppHeader from '@/components/AppHeader';
 import { cn } from '@/lib/utils';
+import { getPens } from '@/lib/data';
 
 export const metadata: Metadata = {
   title: 'BAU-TEC Farm Manager',
   description: 'A functional prototype farm app for managing pens, feeding, and health.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pens = await getPens();
   return (
     <html lang="en" className="h-full">
       <head>
@@ -31,7 +33,7 @@ export default function RootLayout({
       </head>
       <body className={cn('font-body antialiased', 'bg-background')}>
         <SidebarProvider>
-          <AppSidebar />
+          <AppSidebar pens={pens} />
           <SidebarInset>
             <AppHeader />
             <main className="p-4 sm:p-6 lg:p-8">{children}</main>

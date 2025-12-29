@@ -16,26 +16,17 @@ import {
 } from '@/components/ui/sidebar';
 import { LayoutGrid, PlusCircle, CookingPot, Box, LifeBuoy, Settings, Spade, User, Wheat } from 'lucide-react';
 import { Separator } from './ui/separator';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import type { Pen } from '@/lib/types';
-import { getPens } from '@/lib/data';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 import { ChevronDown } from 'lucide-react';
 
-export default function AppSidebar() {
+export default function AppSidebar({ pens }: { pens: Pen[] }) {
   const pathname = usePathname();
-  const [activePens, setActivePens] = useState<Pen[]>([]);
-  const [closedPens, setClosedPens] = useState<Pen[]>([]);
   const { isMobile, setOpenMobile } = useSidebar();
-
-  useEffect(() => {
-    async function fetchPens() {
-      const pens = await getPens();
-      setActivePens(pens.filter(p => p.status === 'Active'));
-      setClosedPens(pens.filter(p => p.status === 'Closed'));
-    }
-    fetchPens();
-  }, []);
+  
+  const activePens = useMemo(() => pens.filter(p => p.status === 'Active'), [pens]);
+  const closedPens = useMemo(() => pens.filter(p => p.status === 'Closed'), [pens]);
 
   const handleLinkClick = () => {
     if (isMobile) {
@@ -81,12 +72,14 @@ export default function AppSidebar() {
         <Separator className="my-4" />
         <SidebarGroup>
           <Collapsible defaultOpen>
+            <div className="group-data-[state=closed]/collapsible:group w-full">
               <CollapsibleTrigger className="w-full">
                 <SidebarGroupLabel className="flex items-center justify-between cursor-pointer w-full group-data-[collapsible=icon]:hidden">
                   <span>Active Pens</span>
                   <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                 </SidebarGroupLabel>
               </CollapsibleTrigger>
+              </div>
               <CollapsibleContent>
                 <SidebarMenu className="mt-2">
                   {activePens.map((pen) => (
@@ -107,12 +100,14 @@ export default function AppSidebar() {
         {closedPens.length > 0 && (
           <SidebarGroup>
             <Collapsible>
-                <CollapsibleTrigger className="w-full">
-                    <SidebarGroupLabel className="flex items-center justify-between cursor-pointer w-full group-data-[collapsible=icon]:hidden">
-                        <span>Closed Pens</span>
-                        <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
-                    </SidebarGroupLabel>
-                </CollapsibleTrigger>
+                <div className="group-data-[state=closed]/collapsible:group w-full">
+                  <CollapsibleTrigger className="w-full">
+                      <SidebarGroupLabel className="flex items-center justify-between cursor-pointer w-full group-data-[collapsible=icon]:hidden">
+                          <span>Closed Pens</span>
+                          <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                      </SidebarGroupLabel>
+                  </CollapsibleTrigger>
+                </div>
                 <CollapsibleContent>
                     <SidebarMenu className="mt-2">
                         {closedPens.map((pen) => (
