@@ -2,9 +2,9 @@ import type { Pen, Recipe, FeedingRecord, HealthRecord, Cow } from '@/lib/types'
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export const recipes: Recipe[] = [
-  { id: 'rec1', name: 'Starter Growth Mix', ingredients: [{ name: 'Corn', targetWeight: 50 }, { name: 'Soybean Meal', targetWeight: 25 }, { name: 'Hay', targetWeight: 25 }] },
-  { id: 'rec2', name: 'Finisher High-Energy', ingredients: [{ name: 'Barley', targetWeight: 60 }, { name: 'Corn Gluten', targetWeight: 20 }, { name: 'Molasses', targetWeight: 20 }] },
-  { id: 'rec3', name: 'Maintenance Diet', ingredients: [{ name: 'Grass Hay', targetWeight: 70 }, { name: 'Alfalfa', targetWeight: 20 }, { name: 'Mineral Salt', targetWeight: 10 }] },
+  { id: 'rec1', name: 'Recipe A', ingredients: [{ name: 'Corn', targetWeight: 50 }, { name: 'Soybean Meal', targetWeight: 25 }, { name: 'Hay', targetWeight: 25 }] },
+  { id: 'rec2', name: 'Recipe B', ingredients: [{ name: 'Barley', targetWeight: 60 }, { name: 'Corn Gluten', targetWeight: 20 }, { name: 'Molasses', targetWeight: 20 }] },
+  { id: 'rec3', name: 'Recipe C', ingredients: [{ name: 'Grass Hay', targetWeight: 70 }, { name: 'Alfalfa', targetWeight: 20 }, { name: 'Mineral Salt', targetWeight: 10 }] },
 ];
 
 export let pens: Pen[] = [
@@ -38,10 +38,10 @@ export let cows: Cow[] = [
 
 
 export const feedingRecords: FeedingRecord[] = [
-  { id: 'feed1', penId: 'pen1', date: '2024-05-20', ingredients: [{ name: 'Corn', actualWeight: 52 }, { name: 'Soybean Meal', actualWeight: 26 }, { name: 'Hay', actualWeight: 25 }] },
-  { id: 'feed2', penId: 'pen2', date: '2024-05-20', ingredients: [{ name: 'Barley', actualWeight: 60 }, { name: 'Corn Gluten', actualWeight: 21 }, { name: 'Molasses', actualWeight: 20 }] },
-  { id: 'feed3', penId: 'pen4', date: '2024-05-19', ingredients: [{ name: 'Corn', actualWeight: 48 }, { name: 'Soybean Meal', actualWeight: 24 }, { name: 'Hay', actualWeight: 25 }] },
-  { id: 'feed4', penId: 'pen1', date: '2024-05-19', ingredients: [{ name: 'Corn', actualWeight: 50 }, { name: 'Soybean Meal', actualWeight: 25 }, { name: 'Hay', actualWeight: 25 }] },
+  { id: 'feed1', penId: 'pen1', recipeId: 'rec1', date: '2024-05-20', ingredients: [{ name: 'Corn', actualWeight: 52 }, { name: 'Soybean Meal', actualWeight: 26 }, { name: 'Hay', actualWeight: 25 }], weight: 103 },
+  { id: 'feed2', penId: 'pen2', recipeId: 'rec2', date: '2024-05-20', ingredients: [{ name: 'Barley', actualWeight: 60 }, { name: 'Corn Gluten', actualWeight: 21 }, { name: 'Molasses', actualWeight: 20 }], weight: 101 },
+  { id: 'feed3', penId: 'pen4', recipeId: 'rec1', date: '2024-05-19', ingredients: [{ name: 'Corn', actualWeight: 48 }, { name: 'Soybean Meal', actualWeight: 24 }, { name: 'Hay', actualWeight: 25 }], weight: 97 },
+  { id: 'feed4', penId: 'pen1', recipeId: 'rec1', date: '2024-05-19', ingredients: [{ name: 'Corn', actualWeight: 50 }, { name: 'Soybean Meal', actualWeight: 25 }, { name: 'Hay', actualWeight: 25 }], weight: 100 },
 ];
 
 export const healthRecords: HealthRecord[] = [

@@ -80,7 +80,7 @@ export async function createCow(prevState: any, formData: FormData) {
         tagId: formData.get('tagId'),
         weight: formData.get('weight'),
         birthDate: formData.get('birthDate'),
-        penId: formData.get('penId') || null,
+        penId: formData.get('penId') === 'null' ? null : formData.get('penId'),
     });
 
     if (!validatedFields.success) {
@@ -103,4 +103,18 @@ export async function createCow(prevState: any, formData: FormData) {
     } catch (e: any) {
         return { message: e.message, errors: {} };
     }
+}
+
+export async function createRecipe(prevState: any, formData: FormData) {
+  // In a real app, you would save this to a database
+  console.log('New Recipe Data:', Object.fromEntries(formData.entries()));
+  revalidatePath('/recipes');
+  // We won't redirect, so the user can see the new recipe in the list
+  return { message: 'Recipe created successfully!' };
+}
+
+export async function trackFeeding(prevState: any, formData: FormData) {
+    console.log('Feeding Data:', Object.fromEntries(formData.entries()));
+    revalidatePath('/feeding');
+    return { message: 'Feeding recorded successfully!' };
 }

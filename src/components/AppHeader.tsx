@@ -21,7 +21,8 @@ export default function AppHeader() {
     if (pathname.startsWith('/dashboard')) return 'Dashboard';
     if (pathname.startsWith('/pens/new')) return 'Create New Pen';
     if (pathname.startsWith('/pens')) return 'Pen Details';
-    if (pathname.startsWith('/ai-insights')) return 'AI Feeding Insights';
+    if (pathname.startsWith('/feeding')) return 'Daily Feeding';
+    if (pathname.startsWith('/recipes')) return 'Recipe Management';
     if (pathname.startsWith('/cows')) return 'Cow Lookup';
     return 'BAU-TEC Farm';
   };

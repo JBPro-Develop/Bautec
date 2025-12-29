@@ -33,7 +33,9 @@ export type Pen = {
 export type FeedingRecord = {
   id: string;
   penId: string;
+  recipeId: string;
   date: string;
+  weight: number;
   ingredients: { name: string; actualWeight: number }[];
 };
 

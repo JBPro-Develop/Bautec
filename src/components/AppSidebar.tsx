@@ -13,7 +13,7 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
 } from '@/components/ui/sidebar';
-import { LayoutGrid, PlusCircle, BrainCircuit, Box, LifeBuoy, Settings, Spade, User } from 'lucide-react';
+import { LayoutGrid, PlusCircle, CookingPot, Box, LifeBuoy, Settings, Spade, User, Wheat } from 'lucide-react';
 import { Separator } from './ui/separator';
 import { useEffect, useState } from 'react';
 import type { Pen } from '@/lib/types';
@@ -33,14 +33,21 @@ export default function AppSidebar() {
 
   const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid, tooltip: 'Dashboard' },
+    { href: '/feeding', label: 'Feeding', icon: Wheat, tooltip: 'Feeding' },
+    { href: '/recipes', label: 'Recipes', icon: CookingPot, tooltip: 'Recipes' },
     { href: '/pens/new', label: 'New Pen / Group', icon: PlusCircle, tooltip: 'New Pen' },
-    { href: '/ai-insights', label: 'AI Feeding Insights', icon: BrainCircuit, tooltip: 'AI Insights' },
     { href: '/cows', label: 'Cow Lookup', icon: User, tooltip: 'Cow Lookup' },
   ];
 
   const isActive = (href: string) => {
     if (href === '/cows') {
       return pathname.startsWith('/cows');
+    }
+    if (href === '/feeding') {
+        return pathname.startsWith('/feeding');
+    }
+    if (href === '/recipes') {
+        return pathname.startsWith('/recipes');
     }
     return pathname === href;
   };
