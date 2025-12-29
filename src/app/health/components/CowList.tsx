@@ -4,26 +4,33 @@ import { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import type { Cow, HealthRecord } from '@/lib/types';
-import { cn } from '@/lib/utils';
+import type { Cow, HealthRecord, Pen } from '@/lib/types';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { getHealthRecordsForCow } from '@/lib/data';
 import { formatDate } from '@/lib/utils';
+import { Separator } from '@/components/ui/separator';
+import AddTreatmentForm from './AddTreatmentForm';
+import { PlusCircle } from 'lucide-react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+
 
 type CowListProps = {
     cows: (Cow & { penName: string })[];
+    pens: Pen[];
 }
 
-export default function CowList({ cows }: CowListProps) {
+export default function CowList({ cows, pens }: CowListProps) {
   const [selectedCow, setSelectedCow] = useState<(Cow & { penName: string }) | null>(null);
   const [healthRecords, setHealthRecords] = useState<HealthRecord[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAddFormOpen, setIsAddFormOpen] = useState(false);
 
   const handleSelect = async (cow: Cow & { penName: string }) => {
     setSelectedCow(cow);
     const records = await getHealthRecordsForCow(cow.id);
     setHealthRecords(records);
     setIsDialogOpen(true);
+    setIsAddFormOpen(false); // Close form when opening dialog
   };
 
   const handleDialogClose = () => {
@@ -33,6 +40,12 @@ export default function CowList({ cows }: CowListProps) {
         setSelectedCow(null);
         setHealthRecords([]);
     }, 300);
+  }
+
+  // Function to refresh records after adding a new one
+  const refreshHealthRecords = async (cowId: string) => {
+    const records = await getHealthRecordsForCow(cowId);
+    setHealthRecords(records);
   }
 
   return (
@@ -72,16 +85,16 @@ export default function CowList({ cows }: CowListProps) {
       
       {selectedCow && (
         <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
-            <DialogContent className="sm:max-w-2xl">
+            <DialogContent className="sm:max-w-3xl">
                 <DialogHeader>
                     <DialogTitle>Health Records for {selectedCow.id}</DialogTitle>
                     <DialogDescription asChild>
-                      <div className="text-sm text-muted-foreground">
+                      <div className="text-sm text-muted-foreground pt-1">
                         Currently in <Badge variant="outline">{selectedCow.penName}</Badge>. A complete history of all health events.
                       </div>
                     </DialogDescription>
                 </DialogHeader>
-                <div className="max-h-[60vh] overflow-y-auto">
+                <div className="max-h-[60vh] overflow-y-auto pr-4">
                     <Table>
                         <TableHeader>
                             <TableRow>
@@ -111,6 +124,27 @@ export default function CowList({ cows }: CowListProps) {
                         </TableBody>
                     </Table>
                 </div>
+                 <Separator />
+                 <Collapsible open={isAddFormOpen} onOpenChange={setIsAddFormOpen}>
+                    <CollapsibleTrigger asChild>
+                         <Button variant="ghost" className="w-full justify-start gap-2">
+                            <PlusCircle className="h-4 w-4" />
+                            Add New Treatment Record
+                        </Button>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                        <div className="pt-4">
+                            <AddTreatmentForm 
+                                cow={selectedCow} 
+                                pens={pens} 
+                                onTreatmentAdded={() => {
+                                    refreshHealthRecords(selectedCow.id);
+                                    setIsAddFormOpen(false); // Close form after submission
+                                }} 
+                            />
+                        </div>
+                    </CollapsibleContent>
+                </Collapsible>
             </DialogContent>
         </Dialog>
       )}

@@ -171,3 +171,12 @@ export async function addCow(cow: Omit<Cow, 'photoUrl' | 'photoHint'>): Promise<
     }
     return newCow;
 }
+
+export async function addHealthRecord(data: Omit<HealthRecord, 'id'>) {
+    const newRecord: HealthRecord = {
+        id: `health${healthRecords.length + 1}`,
+        ...data,
+    };
+    healthRecords.unshift(newRecord);
+    return newRecord;
+}

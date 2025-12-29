@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { optimizeFeedingRecipe } from '@/ai/flows/feeding-recipe-optimization';
 import type { OptimizeFeedingRecipeOutput } from '@/ai/flows/feeding-recipe-optimization';
-import { addCow, addRecipe, addPen } from '@/lib/data';
+import { addCow, addRecipe, addPen, addHealthRecord } from '@/lib/data';
 
 const NewPenSchema = z.object({
   name: z.string().min(1, 'Pen name is required.'),
@@ -26,9 +26,9 @@ export async function createPen(prevState: any, formData: FormData) {
   }
 
   try {
-    await addPen(validatedFields.data);
+    const newPen = await addPen(validatedFields.data);
     revalidatePath('/dashboard');
-    redirect('/dashboard');
+    redirect(`/pens/${newPen.id}`);
   } catch (e: any) {
     return {
         errors: {},
@@ -137,4 +137,40 @@ export async function trackFeeding(prevState: any, formData: FormData) {
     console.log('Feeding Data:', Object.fromEntries(formData.entries()));
     revalidatePath('/feeding');
     return { message: 'Feeding recorded successfully!' };
+}
+
+const AddHealthRecordSchema = z.object({
+  cowTag: z.string().min(1, 'Cow Tag is required'),
+  penId: z.string().min(1, 'Internal Pen ID is required'),
+  drugName: z.string().min(1, 'Drug name is required'),
+  treatmentDate: z.string().min(1, 'Treatment date is required'),
+  dosage: z.string().optional(),
+  reminderDays: z.coerce.number().optional(),
+});
+
+export async function createHealthRecord(prevState: any, formData: FormData) {
+    const validatedFields = AddHealthRecordSchema.safeParse({
+        cowTag: formData.get('cowTag'),
+        penId: formData.get('penId'),
+        drugName: formData.get('drugName'),
+        treatmentDate: formData.get('treatmentDate'),
+        dosage: formData.get('dosage'),
+        reminderDays: formData.get('reminderDays'),
+    });
+
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Failed to add record. Please check the fields.',
+        };
+    }
+
+    try {
+        await addHealthRecord(validatedFields.data);
+        revalidatePath('/health');
+        revalidatePath(`/pens/${validatedFields.data.penId}/health`);
+        return { message: `Successfully added treatment for cow ${validatedFields.data.cowTag}.` };
+    } catch (e: any) {
+        return { message: e.message, errors: {} };
+    }
 }
