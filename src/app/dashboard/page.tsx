@@ -3,6 +3,7 @@ import PenCard from './components/PenCard';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { PlusCircle } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
 
 export default async function Dashboard() {
   const pens = await getPens();
@@ -13,6 +14,9 @@ export default async function Dashboard() {
       return { ...pen, recipeName: recipe?.name || 'N/A' };
     })
   );
+
+  const activePens = pensWithRecipes.filter((pen) => pen.status === 'Active');
+  const closedPens = pensWithRecipes.filter((pen) => pen.status === 'Closed');
 
   return (
     <div className="flex flex-col gap-8">
@@ -25,11 +29,30 @@ export default async function Dashboard() {
           </Link>
         </Button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {pensWithRecipes.map((pen) => (
-          <PenCard key={pen.id} pen={pen} />
-        ))}
+
+      <div>
+        <h2 className="text-2xl font-semibold tracking-tight mb-4">Active Pens</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {activePens.map((pen) => (
+            <PenCard key={pen.id} pen={pen} />
+          ))}
+        </div>
+        {activePens.length === 0 && (
+            <p className="text-muted-foreground">No active pens found.</p>
+        )}
       </div>
+
+      {closedPens.length > 0 && (
+        <div>
+            <Separator className="my-8" />
+            <h2 className="text-2xl font-semibold tracking-tight mb-4 text-muted-foreground">Closed Pens</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {closedPens.map((pen) => (
+                <PenCard key={pen.id} pen={pen} />
+                ))}
+            </div>
+        </div>
+      )}
     </div>
   );
 }
