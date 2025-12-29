@@ -79,38 +79,38 @@ export default function AppSidebar() {
           ))}
         </SidebarMenu>
         <Separator className="my-4" />
-        <Collapsible defaultOpen>
-          <SidebarGroup>
-            <CollapsibleTrigger className="w-full">
-              <SidebarGroupLabel className="flex items-center justify-between cursor-pointer w-full group-data-[collapsible=icon]:hidden">
-                <span>Active Pens</span>
-                <ChevronDown className="h-4 w-4 transition-transform [&[data-state=open]]:rotate-180" />
-              </SidebarGroupLabel>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <SidebarMenu className="mt-2">
-                {activePens.map((pen) => (
-                  <SidebarMenuItem key={pen.id}>
-                    <SidebarMenuButton asChild tooltip={pen.name} isActive={pathname.startsWith(`/pens/${pen.id}`)}>
-                      <Link href={`/pens/${pen.id}`} onClick={handleLinkClick}>
-                        <Box />
-                        <span>{pen.name}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </CollapsibleContent>
-          </SidebarGroup>
-        </Collapsible>
+        <SidebarGroup>
+          <Collapsible defaultOpen>
+              <CollapsibleTrigger className="w-full">
+                <SidebarGroupLabel className="flex items-center justify-between cursor-pointer w-full group-data-[collapsible=icon]:hidden">
+                  <span>Active Pens</span>
+                  <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
+                </SidebarGroupLabel>
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <SidebarMenu className="mt-2">
+                  {activePens.map((pen) => (
+                    <SidebarMenuItem key={pen.id}>
+                      <SidebarMenuButton asChild tooltip={pen.name} isActive={pathname.startsWith(`/pens/${pen.id}`)}>
+                        <Link href={`/pens/${pen.id}`} onClick={handleLinkClick}>
+                          <Box />
+                          <span>{pen.name}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </CollapsibleContent>
+          </Collapsible>
+        </SidebarGroup>
         
         {closedPens.length > 0 && (
-          <Collapsible>
-            <SidebarGroup>
+          <SidebarGroup>
+            <Collapsible>
                 <CollapsibleTrigger className="w-full">
                     <SidebarGroupLabel className="flex items-center justify-between cursor-pointer w-full group-data-[collapsible=icon]:hidden">
                         <span>Closed Pens</span>
-                        <ChevronDown className="h-4 w-4 transition-transform [&[data-state=open]]:rotate-180" />
+                        <ChevronDown className="h-4 w-4 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                     </SidebarGroupLabel>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
@@ -127,8 +127,8 @@ export default function AppSidebar() {
                         ))}
                     </SidebarMenu>
                 </CollapsibleContent>
-            </SidebarGroup>
-          </Collapsible>
+            </Collapsible>
+          </SidebarGroup>
         )}
       </SidebarContent>
       <SidebarFooter>
