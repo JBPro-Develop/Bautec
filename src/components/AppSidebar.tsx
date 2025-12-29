@@ -12,6 +12,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupLabel,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import { LayoutGrid, PlusCircle, CookingPot, Box, LifeBuoy, Settings, Spade, User, Wheat } from 'lucide-react';
 import { Separator } from './ui/separator';
@@ -22,6 +23,7 @@ import { getActivePens } from '@/lib/data';
 export default function AppSidebar() {
   const pathname = usePathname();
   const [activePens, setActivePens] = useState<Pen[]>([]);
+  const { isMobile, setOpenMobile } = useSidebar();
 
   useEffect(() => {
     async function fetchPens() {
@@ -30,6 +32,12 @@ export default function AppSidebar() {
     }
     fetchPens();
   }, []);
+
+  const handleLinkClick = () => {
+    if (isMobile) {
+      setOpenMobile(false);
+    }
+  };
 
   const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid, tooltip: 'Dashboard' },
@@ -40,22 +48,15 @@ export default function AppSidebar() {
   ];
 
   const isActive = (href: string) => {
-    if (href === '/cows') {
-      return pathname.startsWith('/cows');
-    }
-    if (href === '/feeding') {
-        return pathname.startsWith('/feeding');
-    }
-    if (href === '/recipes') {
-        return pathname.startsWith('/recipes');
-    }
-    return pathname === href;
+    if (href === '/dashboard' && pathname === '/dashboard') return true;
+    if (href !== '/dashboard' && pathname.startsWith(href)) return true;
+    return false;
   };
 
   return (
     <Sidebar>
       <SidebarHeader>
-        <Link href="/dashboard" className="flex items-center gap-2">
+        <Link href="/dashboard" className="flex items-center gap-2" onClick={handleLinkClick}>
             <Spade className="w-8 h-8 text-primary" />
             <h1 className="text-xl font-bold font-headline">BAU-TEC Farm</h1>
         </Link>
@@ -65,7 +66,7 @@ export default function AppSidebar() {
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
               <SidebarMenuButton asChild tooltip={item.tooltip} isActive={isActive(item.href)}>
-                <Link href={item.href}>
+                <Link href={item.href} onClick={handleLinkClick}>
                   <item.icon />
                   <span>{item.label}</span>
                 </Link>
@@ -80,7 +81,7 @@ export default function AppSidebar() {
             {activePens.map((pen) => (
               <SidebarMenuItem key={pen.id}>
                 <SidebarMenuButton asChild tooltip={pen.name} isActive={pathname.startsWith(`/pens/${pen.id}`)}>
-                  <Link href={`/pens/${pen.id}`}>
+                  <Link href={`/pens/${pen.id}`} onClick={handleLinkClick}>
                     <Box />
                     <span>{pen.name}</span>
                   </Link>
@@ -94,7 +95,7 @@ export default function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Help">
-              <Link href="#">
+              <Link href="#" onClick={handleLinkClick}>
                 <LifeBuoy />
                 <span>Help</span>
               </Link>
@@ -102,7 +103,7 @@ export default function AppSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem>
             <SidebarMenuButton asChild tooltip="Settings">
-              <Link href="#">
+              <Link href="#" onClick={handleLinkClick}>
                 <Settings />
                 <span>Settings</span>
               </Link>
