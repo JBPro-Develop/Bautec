@@ -38,6 +38,13 @@ export default function AppSidebar() {
     { href: '/cows', label: 'Cow Lookup', icon: User, tooltip: 'Cow Lookup' },
   ];
 
+  const isActive = (href: string) => {
+    if (href === '/cows') {
+      return pathname.startsWith('/cows');
+    }
+    return pathname === href;
+  };
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -50,7 +57,7 @@ export default function AppSidebar() {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton asChild tooltip={item.tooltip} isActive={pathname === item.href}>
+              <SidebarMenuButton asChild tooltip={item.tooltip} isActive={isActive(item.href)}>
                 <Link href={item.href}>
                   <item.icon />
                   <span>{item.label}</span>

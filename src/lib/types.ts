@@ -9,6 +9,13 @@ export type Recipe = {
   ingredients: Ingredient[];
 };
 
+export type Cow = {
+  id: string; // This is the tag ID
+  penId: string | null;
+  weight: number;
+  birthDate: string;
+};
+
 export type Pen = {
   id: string;
   name: string;

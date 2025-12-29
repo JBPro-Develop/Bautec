@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 import { z } from 'zod';
 import { optimizeFeedingRecipe } from '@/ai/flows/feeding-recipe-optimization';
 import type { OptimizeFeedingRecipeOutput } from '@/ai/flows/feeding-recipe-optimization';
+import { addCow } from './data';
 
 const NewPenSchema = z.object({
   name: z.string().min(1, 'Pen name is required.'),
@@ -65,4 +66,41 @@ export async function getFeedingRecommendation(
       error: e.message || 'An unknown error occurred.',
     };
   }
+}
+
+const AddCowSchema = z.object({
+  tagId: z.string().min(1, 'Tag ID is required.'),
+  weight: z.coerce.number().positive('Weight must be a positive number.'),
+  birthDate: z.string().min(1, 'Birth date is required.'),
+  penId: z.string().nullable(),
+});
+
+export async function createCow(prevState: any, formData: FormData) {
+    const validatedFields = AddCowSchema.safeParse({
+        tagId: formData.get('tagId'),
+        weight: formData.get('weight'),
+        birthDate: formData.get('birthDate'),
+        penId: formData.get('penId') || null,
+    });
+
+    if (!validatedFields.success) {
+        return {
+            errors: validatedFields.error.flatten().fieldErrors,
+            message: 'Failed to add cow. Please check the fields.',
+        };
+    }
+    
+    try {
+        await addCow({
+            id: validatedFields.data.tagId,
+            weight: validatedFields.data.weight,
+            birthDate: validatedFields.data.birthDate,
+            penId: validatedFields.data.penId,
+        });
+
+        revalidatePath('/cows');
+        return { message: `Successfully added cow ${validatedFields.data.tagId}.` };
+    } catch (e: any) {
+        return { message: e.message, errors: {} };
+    }
 }

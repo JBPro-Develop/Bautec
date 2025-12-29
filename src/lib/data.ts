@@ -1,4 +1,4 @@
-import type { Pen, Recipe, FeedingRecord, HealthRecord } from '@/lib/types';
+import type { Pen, Recipe, FeedingRecord, HealthRecord, Cow } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 export const recipes: Recipe[] = [
@@ -7,7 +7,7 @@ export const recipes: Recipe[] = [
   { id: 'rec3', name: 'Maintenance Diet', ingredients: [{ name: 'Grass Hay', targetWeight: 70 }, { name: 'Alfalfa', targetWeight: 20 }, { name: 'Mineral Salt', targetWeight: 10 }] },
 ];
 
-export const pens: Pen[] = [
+export let pens: Pen[] = [
   { 
     id: 'pen1', name: 'North Field Pen', headCount: 50, arrivalDate: '2023-10-01', initialWeight: 300, expectedShipDate: '2024-06-01', 
     animalTags: Array.from({ length: 50 }, (_, i) => `A${100 + i}`), 
@@ -29,6 +29,13 @@ export const pens: Pen[] = [
     recipeId: 'rec1', photoUrl: PlaceHolderImages[3].imageUrl, photoHint: PlaceHolderImages[3].imageHint, status: 'Active' 
   },
 ];
+
+export let cows: Cow[] = [
+    ...Array.from({ length: 50 }, (_, i) => ({ id: `A${100 + i}`, penId: 'pen1', weight: 450 + i * 2, birthDate: '2023-04-01' })),
+    ...Array.from({ length: 75 }, (_, i) => ({ id: `B${200 + i}`, penId: 'pen2', weight: 420 + i * 1.5, birthDate: '2023-05-15' })),
+    ...Array.from({ length: 60 }, (_, i) => ({ id: `D${400 + i}`, penId: 'pen4', weight: 430 + i * 2.5, birthDate: '2023-08-10' })),
+];
+
 
 export const feedingRecords: FeedingRecord[] = [
   { id: 'feed1', penId: 'pen1', date: '2024-05-20', ingredients: [{ name: 'Corn', actualWeight: 52 }, { name: 'Soybean Meal', actualWeight: 26 }, { name: 'Hay', actualWeight: 25 }] },
@@ -69,4 +76,33 @@ export async function getFeedingRecordsForPen(penId: string) {
 
 export async function getHealthRecordsForPen(penId: string) {
     return healthRecords.filter(record => record.penId === penId).sort((a, b) => new Date(b.treatmentDate).getTime() - new Date(a.treatmentDate).getTime());
+}
+
+export async function getCowById(id: string): Promise<Cow | undefined> {
+    return cows.find(cow => cow.id.toLowerCase() === id.toLowerCase());
+}
+
+export async function getCows(query?: string): Promise<Cow[]> {
+    if (!query) {
+        return [];
+    }
+    return cows.filter(cow => cow.id.toLowerCase().includes(query.toLowerCase()));
+}
+
+export async function addCow(cow: Cow) {
+    // Check if cow with same ID already exists
+    if (cows.find(c => c.id.toLowerCase() === cow.id.toLowerCase())) {
+        throw new Error('A cow with this Tag ID already exists.');
+    }
+    cows.push(cow);
+
+    // If a pen is assigned, add the cow's tag to the pen
+    if (cow.penId) {
+        const pen = pens.find(p => p.id === cow.penId);
+        if (pen) {
+            pen.animalTags.push(cow.id);
+            pen.headCount++;
+        }
+    }
+    return cow;
 }
