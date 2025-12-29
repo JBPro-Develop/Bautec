@@ -34,8 +34,8 @@ const OptimizeFeedingRecipeOutputSchema = z.object({
   recommendations: z
     .string()
     .describe(
-      'Optimized feeding recipe recommendations, including adjustments to ingredients and weights, with reasoning.
-'    ),
+      `Optimized feeding recipe recommendations, including adjustments to ingredients and weights, with reasoning.`
+    ),
 });
 export type OptimizeFeedingRecipeOutput = z.infer<typeof OptimizeFeedingRecipeOutputSchema>;
 
@@ -60,7 +60,7 @@ Current Recipe: {{{currentRecipe}}}
 Target Weight Gain: {{{targetWeightGain}}}
 
 Provide specific recommendations for adjusting the feeding recipe to improve animal growth and reduce feed costs.
-`, // Changed the prompt to be more descriptive
+`,
 });
 
 const optimizeFeedingRecipeFlow = ai.defineFlow(
