@@ -80,7 +80,7 @@ export async function getCowById(id: string): Promise<Cow | undefined> {
 
 export async function getCows(query?: string): Promise<Cow[]> {
     if (!query) {
-        return [];
+        return cows;
     }
     return cows.filter(cow => cow.id.toLowerCase().includes(query.toLowerCase()));
 }

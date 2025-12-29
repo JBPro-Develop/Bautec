@@ -25,12 +25,12 @@ function getAge(birthDate: string): string {
 
 
 export default function SearchResults({ cows, query }: SearchResultsProps) {
-    if (!query) {
-        return <p className="text-center text-muted-foreground pt-8">Enter an animal's tag ID to see its information.</p>
+    if (cows.length === 0 && query) {
+        return <p className="text-center text-muted-foreground pt-8">No animals found matching "{query}".</p>
     }
 
     if (cows.length === 0) {
-        return <p className="text-center text-muted-foreground pt-8">No animals found matching "{query}".</p>
+        return <p className="text-center text-muted-foreground pt-8">No animals found. Add one to get started.</p>
     }
     
     return (

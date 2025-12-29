@@ -5,6 +5,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { differenceInMonths, differenceInYears } from 'date-fns';
 import Image from 'next/image';
 import PenCowsSearchSection from './components/PenCowsSearchSection';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { RefreshCw } from 'lucide-react';
 
 function getAge(birthDate: string): string {
     const now = new Date();
@@ -43,7 +46,15 @@ export default async function PenCowsPage({
             <CardTitle>Cows in {pen.name}</CardTitle>
             <CardDescription>A list of all animals currently assigned to this pen.</CardDescription>
           </div>
-          <PenCowsSearchSection />
+          <div className="flex items-center gap-2">
+            <PenCowsSearchSection />
+            <Button variant="outline" size="icon" asChild>
+                <Link href={`/pens/${params.id}/cows`}>
+                    <RefreshCw className="h-4 w-4" />
+                    <span className="sr-only">Refresh</span>
+                </Link>
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent>

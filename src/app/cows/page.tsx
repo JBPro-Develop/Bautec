@@ -21,6 +21,7 @@ export default async function CowsPage({
 }) {
   const pens = await getPens();
   const query = searchParams?.query || '';
+  // Pass query to getCows. If query is empty, it will return all cows.
   const cows = await getCows(query);
 
   const cowsWithPenNames = await Promise.all(
@@ -38,7 +39,7 @@ export default async function CowsPage({
           <CardHeader>
             <CardTitle>Cow Search</CardTitle>
             <CardDescription>
-              Search for an individual animal by their tag ID to view their details.
+              Search for an individual animal by their tag ID or browse all animals below.
             </CardDescription>
           </CardHeader>
           <CardContent>
