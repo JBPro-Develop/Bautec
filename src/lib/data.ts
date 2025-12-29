@@ -1,0 +1,72 @@
+import type { Pen, Recipe, FeedingRecord, HealthRecord } from '@/lib/types';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+
+export const recipes: Recipe[] = [
+  { id: 'rec1', name: 'Starter Growth Mix', ingredients: [{ name: 'Corn', targetWeight: 50 }, { name: 'Soybean Meal', targetWeight: 25 }, { name: 'Hay', targetWeight: 25 }] },
+  { id: 'rec2', name: 'Finisher High-Energy', ingredients: [{ name: 'Barley', targetWeight: 60 }, { name: 'Corn Gluten', targetWeight: 20 }, { name: 'Molasses', targetWeight: 20 }] },
+  { id: 'rec3', name: 'Maintenance Diet', ingredients: [{ name: 'Grass Hay', targetWeight: 70 }, { name: 'Alfalfa', targetWeight: 20 }, { name: 'Mineral Salt', targetWeight: 10 }] },
+];
+
+export const pens: Pen[] = [
+  { 
+    id: 'pen1', name: 'North Field Pen', headCount: 50, arrivalDate: '2023-10-01', initialWeight: 300, expectedShipDate: '2024-06-01', 
+    animalTags: Array.from({ length: 50 }, (_, i) => `A${100 + i}`), 
+    recipeId: 'rec1', photoUrl: PlaceHolderImages[0].imageUrl, photoHint: PlaceHolderImages[0].imageHint, status: 'Active' 
+  },
+  { 
+    id: 'pen2', name: 'East Valley Group', headCount: 75, arrivalDate: '2023-11-15', initialWeight: 280, expectedShipDate: '2024-07-15', 
+    animalTags: Array.from({ length: 75 }, (_, i) => `B${200 + i}`), 
+    recipeId: 'rec2', photoUrl: PlaceHolderImages[1].imageUrl, photoHint: PlaceHolderImages[1].imageHint, status: 'Active' 
+  },
+  { 
+    id: 'pen3', name: 'South Hill Pasture', headCount: 40, arrivalDate: '2023-09-01', initialWeight: 320, expectedShipDate: '2024-03-01', 
+    animalTags: Array.from({ length: 40 }, (_, i) => `C${300 + i}`), 
+    recipeId: 'rec3', photoUrl: PlaceHolderImages[2].imageUrl, photoHint: PlaceHolderImages[2].imageHint, status: 'Closed' 
+  },
+  { 
+    id: 'pen4', name: 'West Creek Corral', headCount: 60, arrivalDate: '2024-01-10', initialWeight: 290, expectedShipDate: '2024-09-10', 
+    animalTags: Array.from({ length: 60 }, (_, i) => `D${400 + i}`), 
+    recipeId: 'rec1', photoUrl: PlaceHolderImages[3].imageUrl, photoHint: PlaceHolderImages[3].imageHint, status: 'Active' 
+  },
+];
+
+export const feedingRecords: FeedingRecord[] = [
+  { id: 'feed1', penId: 'pen1', date: '2024-05-20', ingredients: [{ name: 'Corn', actualWeight: 52 }, { name: 'Soybean Meal', actualWeight: 26 }, { name: 'Hay', actualWeight: 25 }] },
+  { id: 'feed2', penId: 'pen2', date: '2024-05-20', ingredients: [{ name: 'Barley', actualWeight: 60 }, { name: 'Corn Gluten', actualWeight: 21 }, { name: 'Molasses', actualWeight: 20 }] },
+  { id: 'feed3', penId: 'pen4', date: '2024-05-19', ingredients: [{ name: 'Corn', actualWeight: 48 }, { name: 'Soybean Meal', actualWeight: 24 }, { name: 'Hay', actualWeight: 25 }] },
+  { id: 'feed4', penId: 'pen1', date: '2024-05-19', ingredients: [{ name: 'Corn', actualWeight: 50 }, { name: 'Soybean Meal', actualWeight: 25 }, { name: 'Hay', actualWeight: 25 }] },
+];
+
+export const healthRecords: HealthRecord[] = [
+  { id: 'health1', penId: 'pen1', cowTag: 'A101', treatmentDate: '2024-04-15', drugName: 'Ivermectin', dosage: '10ml', reminderDays: 60 },
+  { id: 'health2', penId: 'pen2', cowTag: 'B205', treatmentDate: '2024-05-01', drugName: 'Penicillin', dosage: '5ml', reminderDays: 90 },
+];
+
+// Data access functions
+export async function getPens() {
+  return pens;
+}
+
+export async function getActivePens() {
+    return pens.filter(pen => pen.status === 'Active');
+}
+
+export async function getPenById(id: string) {
+  return pens.find(pen => pen.id === id);
+}
+
+export async function getRecipeById(id: string) {
+  return recipes.find(recipe => recipe.id === id);
+}
+
+export async function getRecipes() {
+    return recipes;
+}
+
+export async function getFeedingRecordsForPen(penId: string) {
+  return feedingRecords.filter(record => record.penId === penId).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
+export async function getHealthRecordsForPen(penId: string) {
+    return healthRecords.filter(record => record.penId === penId).sort((a, b) => new Date(b.treatmentDate).getTime() - new Date(a.treatmentDate).getTime());
+}

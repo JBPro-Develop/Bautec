@@ -1,0 +1,68 @@
+// @ts-nocheck
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { z } from 'zod';
+import { optimizeFeedingRecipe } from '@/ai/flows/feeding-recipe-optimization';
+import type { OptimizeFeedingRecipeOutput } from '@/ai/flows/feeding-recipe-optimization';
+
+const NewPenSchema = z.object({
+  name: z.string().min(1, 'Pen name is required.'),
+  headCount: z.coerce.number().min(1, 'Number of heads must be at least 1.'),
+  arrivalDate: z.string().min(1, 'Arrival date is required.'),
+  initialWeight: z.coerce.number().min(1, 'Initial weight is required.'),
+  expectedShipDate: z.string().min(1, 'Expected ship date is required.'),
+  animalTags: z.string().optional(),
+  recipeId: z.string().min(1, 'A recipe must be selected.'),
+});
+
+export async function createPen(prevState: any, formData: FormData) {
+  const validatedFields = NewPenSchema.safeParse(Object.fromEntries(formData.entries()));
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  // In a real app, you would save this to a database
+  console.log('New Pen Data:', validatedFields.data);
+
+  revalidatePath('/dashboard');
+  redirect('/dashboard');
+}
+
+
+// AI Form Action
+export type AIFormState = {
+  form: Record<string, string>;
+  response?: OptimizeFeedingRecipeOutput;
+  error?: string;
+};
+
+export async function getFeedingRecommendation(
+  prevState: AIFormState,
+  formData: FormData
+): Promise<AIFormState> {
+  const input = {
+    penConditions: formData.get('penConditions') as string,
+    pastFeedingData: formData.get('pastFeedingData') as string,
+    ingredientAvailability: formData.get('ingredientAvailability') as string,
+    currentRecipe: formData.get('currentRecipe') as string,
+    targetWeightGain: formData.get('targetWeightGain') as string,
+  };
+
+  try {
+    const response = await optimizeFeedingRecipe(input);
+    return {
+      form: input,
+      response,
+    };
+  } catch (e: any) {
+    return {
+      form: input,
+      error: e.message || 'An unknown error occurred.',
+    };
+  }
+}

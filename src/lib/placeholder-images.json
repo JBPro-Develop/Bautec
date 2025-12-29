@@ -1,3 +1,34 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "1",
+      "description": "Cows in a field",
+      "imageUrl": "https://images.unsplash.com/photo-1756638447144-cfaa1dea21f3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxjb3dzJTIwZmllbGR8ZW58MHx8fHwxNzY2OTc4NDQyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cows field"
+    },
+    {
+      "id": "2",
+      "description": "A single cow in a pasture",
+      "imageUrl": "https://images.unsplash.com/photo-1662377928445-eeafc9c033a1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjb3clMjBwYXN0dXJlfGVufDB8fHx8MTc2NjkxNTI5Nnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cow pasture"
+    },
+    {
+      "id": "3",
+      "description": "Barn on a farm",
+      "imageUrl": "https://images.unsplash.com/photo-1663595438110-f3dedb537d69?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxmYXJtJTIwYmFybnxlbnwwfHx8fDE3NjY5NTE5NDd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "farm barn"
+    },
+    {
+      "id": "4",
+      "description": "Hay bales in a field",
+      "imageUrl": "https://images.unsplash.com/photo-1596047782001-606d3e0cf41d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxoYXklMjBiYWxlc3xlbnwwfHx8fDE3NjY5Nzg0NDN8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hay bales"
+    },
+    {
+      "id": "5",
+      "description": "Close up of a cow's face",
+      "imageUrl": "https://images.unsplash.com/photo-1684023055183-a49e35a18e2e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxjb3clMjBmYWNlfGVufDB8fHx8MTc2Njk3ODQ0Mnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "cow face"
+    }
+  ]
 }
