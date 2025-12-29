@@ -79,21 +79,30 @@ export default function AppSidebar() {
           ))}
         </SidebarMenu>
         <Separator className="my-4" />
-        <SidebarGroup>
-          <SidebarGroupLabel>Active Pens</SidebarGroupLabel>
-          <SidebarMenu>
-            {activePens.map((pen) => (
-              <SidebarMenuItem key={pen.id}>
-                <SidebarMenuButton asChild tooltip={pen.name} isActive={pathname.startsWith(`/pens/${pen.id}`)}>
-                  <Link href={`/pens/${pen.id}`} onClick={handleLinkClick}>
-                    <Box />
-                    <span>{pen.name}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarGroup>
+        <Collapsible defaultOpen>
+          <SidebarGroup>
+            <CollapsibleTrigger className="w-full">
+              <SidebarGroupLabel className="flex items-center justify-between cursor-pointer w-full group-data-[collapsible=icon]:hidden">
+                <span>Active Pens</span>
+                <ChevronDown className="h-4 w-4 transition-transform [&[data-state=open]]:rotate-180" />
+              </SidebarGroupLabel>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <SidebarMenu className="mt-2">
+                {activePens.map((pen) => (
+                  <SidebarMenuItem key={pen.id}>
+                    <SidebarMenuButton asChild tooltip={pen.name} isActive={pathname.startsWith(`/pens/${pen.id}`)}>
+                      <Link href={`/pens/${pen.id}`} onClick={handleLinkClick}>
+                        <Box />
+                        <span>{pen.name}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </CollapsibleContent>
+          </SidebarGroup>
+        </Collapsible>
         
         {closedPens.length > 0 && (
           <Collapsible>
