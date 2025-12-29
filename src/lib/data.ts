@@ -102,12 +102,12 @@ export async function addCow(cow: Cow): Promise<Cow> {
 
     cows.push(cow);
 
-    // If a pen is assigned, add the cow's tag to the pen
+    // If a pen is assigned, add the cow's tag and increment headCount
     if (cow.penId) {
-        const pen = pens.find(p => p.id === cow.penId);
-        if (pen) {
-            pen.animalTags.push(cow.id);
-            pen.headCount++;
+        const penIndex = pens.findIndex(p => p.id === cow.penId);
+        if (penIndex !== -1) {
+            pens[penIndex].animalTags.push(cow.id);
+            pens[penIndex].headCount++;
         }
     }
     return cow;
