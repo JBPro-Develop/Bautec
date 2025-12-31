@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { getPenById } from '@/lib/data';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Droplets, HeartPulse, Archive, ArrowLeft, Beef } from 'lucide-react';
+import { Droplets, HeartPulse, ArrowLeft, Beef, Settings, Archive } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export default async function PenDetailLayout({
@@ -40,7 +40,7 @@ export default async function PenDetailLayout({
       </div>
 
       <Tabs defaultValue="feeding" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="cows" asChild>
             <Link href={`/pens/${pen.id}/cows`}>
               <Beef className="mr-2 h-4 w-4" /> Cows
@@ -54,6 +54,11 @@ export default async function PenDetailLayout({
           <TabsTrigger value="health" asChild>
             <Link href={`/pens/${pen.id}/health`}>
               <HeartPulse className="mr-2 h-4 w-4" /> Health
+            </Link>
+          </TabsTrigger>
+           <TabsTrigger value="settings" asChild>
+            <Link href={`/pens/${pen.id}/settings`}>
+              <Settings className="mr-2 h-4 w-4" /> Settings
             </Link>
           </TabsTrigger>
           <TabsTrigger value="close" asChild>

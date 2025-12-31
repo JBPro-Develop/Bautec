@@ -1,4 +1,4 @@
-import { getPenById, getCowsByPenId } from '@/lib/data';
+import { getPenById, getCowsByPenId, getPens } from '@/lib/data';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -7,7 +7,9 @@ import Image from 'next/image';
 import PenCowsSearchSection from './components/PenCowsSearchSection';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, ArrowRightLeft, Trash2, MoreVertical } from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuPortal } from '@/components/ui/dropdown-menu';
+
 
 function getAge(birthDate: string): string {
     const now = new Date();
@@ -30,6 +32,9 @@ export default async function PenCowsPage({
 }) {
   const pen = await getPenById(params.id);
   if (!pen) notFound();
+
+  const allPens = await getPens();
+  const otherPens = allPens.filter(p => p.id !== pen.id && p.status === 'Active');
 
   const query = searchParams?.query || '';
   let allCows = await getCowsByPenId(pen.id);
@@ -65,6 +70,7 @@ export default async function PenCowsPage({
               <TableHead>Tag ID</TableHead>
               <TableHead>Weight (lbs)</TableHead>
               <TableHead>Age</TableHead>
+              <TableHead className="text-right w-[50px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -85,11 +91,41 @@ export default async function PenCowsPage({
                 <TableCell className="font-medium">{cow.id}</TableCell>
                 <TableCell>{cow.weight}</TableCell>
                 <TableCell>{getAge(cow.birthDate)}</TableCell>
+                <TableCell className="text-right">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                                <MoreVertical className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                             <DropdownMenuSub>
+                                <DropdownMenuSubTrigger>
+                                    <ArrowRightLeft className="mr-2 h-4 w-4"/>
+                                    <span>Transfer</span>
+                                </DropdownMenuSubTrigger>
+                                <DropdownMenuPortal>
+                                    <DropdownMenuSubContent>
+                                        {otherPens.map(p => (
+                                            <DropdownMenuItem key={p.id}>{p.name}</DropdownMenuItem>
+                                        ))}
+                                        {otherPens.length === 0 && <DropdownMenuItem disabled>No other active pens</DropdownMenuItem>}
+                                    </DropdownMenuSubContent>
+                                </DropdownMenuPortal>
+                            </DropdownMenuSub>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem className="text-destructive">
+                                <Trash2 className="mr-2 h-4 w-4"/>
+                                <span>Remove from Pen</span>
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </TableCell>
               </TableRow>
             ))}
             {filteredCows.length === 0 && (
               <TableRow>
-                <TableCell colSpan={4} className="text-center">
+                <TableCell colSpan={5} className="text-center">
                     {query ? `No cows found for "${query}".` : 'No cows found in this pen.'}
                 </TableCell>
               </TableRow>
