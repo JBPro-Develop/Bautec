@@ -36,24 +36,6 @@ export default function AppSidebar({ pens }: { pens: Pen[] }) {
       setOpenMobile(false);
     }
   };
-
-  const isActive = (href: string) => {
-    // Exact match for dashboard
-    if (href === '/dashboard') {
-        return pathname === href;
-    }
-    // Special handling for /pens/new to not activate other /pens links
-    if (href === '/pens/new') {
-        return pathname === href;
-    }
-    // For all other main links, check if the pathname starts with the href,
-    // but also ensure it's not the more specific '/pens/new' case.
-    if (href !== '/pens/new' && pathname.startsWith('/pens')) {
-        return false; // Don't activate other links when on a pen page
-    }
-
-    return pathname.startsWith(href);
-  };
   
   const activePens = pens.filter(p => p.status === 'Active');
   const closedPens = pens.filter(p => p.status === 'Closed');
@@ -70,7 +52,7 @@ export default function AppSidebar({ pens }: { pens: Pen[] }) {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton asChild tooltip={item.tooltip} isActive={isActive(item.href)}>
+              <SidebarMenuButton asChild tooltip={item.tooltip} isActive={pathname === item.href}>
                 <Link href={item.href} onClick={handleLinkClick}>
                   <item.icon />
                   <span>{item.label}</span>
