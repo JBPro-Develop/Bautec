@@ -13,7 +13,8 @@ export default async function PenDetailLayout({
   children: React.ReactNode;
   params: { id: string };
 }) {
-  const pen = await getPenById(params.id);
+  const { id } = params;
+  const pen = await getPenById(id);
 
   if (!pen) {
     notFound();

@@ -30,13 +30,13 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // Allow all cross-origin requests in development.
-  // This is for the Firebase Studio environment and should not be used in production.
-  ...(process.env.NODE_ENV === 'development' && {
-    experimental: {
+  experimental: {
+    // Allow all cross-origin requests in development.
+    // This is for the Firebase Studio environment and should not be used in production.
+    ...(process.env.NODE_ENV === 'development' && {
       allowedDevOrigins: ['**'],
-    },
-  }),
+    }),
+  },
 };
 
 export default nextConfig;

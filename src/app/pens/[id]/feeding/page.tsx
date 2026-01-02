@@ -10,7 +10,8 @@ import { formatDate } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 
 export default async function FeedingPage({ params }: { params: { id: string } }) {
-  const pen = await getPenById(params.id);
+  const { id } = params;
+  const pen = await getPenById(id);
   if (!pen) notFound();
   
   const recipe = await getRecipeById(pen.recipeId);
