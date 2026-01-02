@@ -37,7 +37,7 @@ export default async function PenCowsPage({
   const otherPens = allPens.filter(p => p.id !== pen.id && p.status === 'Active');
 
   const query = searchParams?.query || '';
-  let allCows = await getCowsByPenId(pen.id);
+  const allCows = await getCowsByPenId(pen.id);
   
   const filteredCows = query 
     ? allCows.filter(cow => cow.id.toLowerCase().includes(query.toLowerCase()))
