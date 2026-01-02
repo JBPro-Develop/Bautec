@@ -13,7 +13,6 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   useSidebar,
-  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { LayoutGrid, PlusCircle, CookingPot, Box, LifeBuoy, Settings, Spade, User, Wheat, HeartPulse } from 'lucide-react';
 import { Separator } from './ui/separator';
@@ -55,7 +54,6 @@ export default function AppSidebar() {
             <Spade className="w-8 h-8 text-primary" />
             <h1 className="text-xl font-bold font-headline">BAU-TEC Farm</h1>
         </Link>
-        <SidebarTrigger className="hidden md:flex" />
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
