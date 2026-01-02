@@ -13,18 +13,18 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   useSidebar,
+  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { LayoutGrid, PlusCircle, CookingPot, Box, LifeBuoy, Settings, Spade, User, Wheat, HeartPulse } from 'lucide-react';
 import { Separator } from './ui/separator';
 import type { Pen } from '@/lib/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { getPens } from '@/lib/data';
 
 const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid, tooltip: 'Dashboard' },
     { href: '/feeding', label: 'Feeding', icon: Wheat, tooltip: 'Feeding' },
     { href: '/recipes', label: 'Recipes', icon: CookingPot, tooltip: 'Recipes' },
-    { href: '/pens', label: 'Pens', icon: Box, tooltip: 'Pens' },
     { href: '/cows', label: 'Cows', icon: User, tooltip: 'Cow Lookup' },
     { href: '/health', label: 'Health', icon: HeartPulse, tooltip: 'Health' },
 ];
@@ -47,9 +47,9 @@ export default function AppSidebar() {
       setOpenMobile(false);
     }
   };
-  
-  const activePens = pens.filter(p => p.status === 'Active');
-  const closedPens = pens.filter(p => p.status === 'Closed');
+
+  const activePens = useMemo(() => pens.filter(p => p.status === 'Active'), [pens]);
+  const closedPens = useMemo(() => pens.filter(p => p.status === 'Closed'), [pens]);
 
   return (
     <Sidebar>
@@ -58,12 +58,13 @@ export default function AppSidebar() {
             <Spade className="w-8 h-8 text-primary" />
             <h1 className="text-xl font-bold font-headline">BAU-TEC Farm</h1>
         </Link>
+        <SidebarTrigger className="hidden md:flex" />
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton asChild tooltip={item.tooltip} isActive={pathname.startsWith(item.href)} href={item.href}>
+              <SidebarMenuButton asChild tooltip={item.tooltip} isActive={pathname === item.href}>
                 <Link href={item.href} onClick={handleLinkClick}>
                   <item.icon />
                   <span>{item.label}</span>
