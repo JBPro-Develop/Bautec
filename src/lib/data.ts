@@ -163,12 +163,35 @@ export async function getFeedingRecordsForPen(penId: string) {
   return feedingRecords.filter(record => record.penId === penId).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
+export async function getFeedingHistory() {
+    const penMap = new Map(pens.map(p => [p.id, p.name]));
+    const recipeMap = new Map(recipes.map(r => [r.id, r.name]));
+
+    return feedingRecords
+        .map(record => ({
+            ...record,
+            penName: penMap.get(record.penId) || 'Unknown Pen',
+            recipeName: recipeMap.get(record.recipeId) || 'Unknown Recipe',
+        }))
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
+
 export async function getHealthRecordsForPen(penId: string) {
     return healthRecords.filter(record => record.penId === penId).sort((a, b) => new Date(b.treatmentDate).getTime() - new Date(a.treatmentDate).getTime());
 }
 
 export async function getHealthRecordsForCow(cowId: string) {
     return healthRecords.filter(record => record.cowTag === cowId).sort((a, b) => new Date(b.treatmentDate).getTime() - new Date(a.treatmentDate).getTime());
+}
+
+export async function getAllHealthRecords() {
+    const penMap = new Map(pens.map(p => [p.id, p.name]));
+    return healthRecords
+        .map(record => ({
+            ...record,
+            penName: penMap.get(record.penId) || 'Unknown Pen',
+        }))
+        .sort((a, b) => new Date(b.treatmentDate).getTime() - new Date(a.treatmentDate).getTime());
 }
 
 export async function getCowById(id: string): Promise<Cow | undefined> {
@@ -184,8 +207,7 @@ export async function getCows(query?: string): Promise<Cow[]> {
 
 export async function getCowsWithPenNames(query?: string) {
     const filteredCows = await getCows(query);
-    const allPens = await getPens();
-    const penMap = new Map(allPens.map(p => [p.id, p.name]));
+    const penMap = new Map(pens.map(p => [p.id, p.name]));
 
     return filteredCows.map(cow => ({
         ...cow,
