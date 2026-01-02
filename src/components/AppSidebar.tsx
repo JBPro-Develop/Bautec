@@ -44,7 +44,8 @@ export default function AppSidebar({ pens }: { pens: Pen[] }) {
 
   const isActive = (href: string) => {
     if (href === '/dashboard' && pathname === '/dashboard') return true;
-    if (href !== '/dashboard' && pathname.startsWith(href)) return true;
+    if (href === '/pens/new' && (pathname.startsWith('/pens') || pathname.startsWith('/cows'))) return true;
+    if (href !== '/dashboard' && href !== '/pens/new' && pathname.startsWith(href)) return true;
     return false;
   };
 

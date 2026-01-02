@@ -40,7 +40,7 @@ export default async function PenDetailLayout({
         <p className="text-muted-foreground mt-1">{pen.headCount} heads</p>
       </div>
 
-      <Tabs defaultValue="feeding" className="w-full">
+      <Tabs defaultValue="cows" className="w-full">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="cows" asChild>
             <Link href={`/pens/${pen.id}/cows`}>
