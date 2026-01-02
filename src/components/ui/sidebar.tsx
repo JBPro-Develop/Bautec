@@ -4,6 +4,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
 import { PanelLeft } from "lucide-react"
+import { usePathname } from 'next/navigation'
 
 import { useIsMobile } from "@/hooks/use-mobile"
 import { cn } from "@/lib/utils"
@@ -539,22 +540,33 @@ const SidebarMenuButton = React.forwardRef<
     asChild?: boolean
     isActive?: boolean
     tooltip?: string | React.ComponentProps<typeof TooltipContent>
+    href?: string
   } & VariantProps<typeof sidebarMenuButtonVariants>
 >(
   (
     {
       asChild = false,
-      isActive = false,
+      isActive: isActiveProp,
       variant = "default",
       size = "default",
       tooltip,
       className,
+      href,
       ...props
     },
     ref
   ) => {
     const Comp = asChild ? Slot : "button"
     const { isMobile, state } = useSidebar()
+    const pathname = usePathname()
+
+    const isActive = React.useMemo(() => {
+      if (isActiveProp !== undefined) return isActiveProp;
+      if (!href) return false;
+      if (href === '/pens/new') return pathname === href;
+      return pathname.startsWith(href);
+    }, [pathname, href, isActiveProp])
+
 
     const button = (
       <Comp
