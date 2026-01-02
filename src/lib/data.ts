@@ -54,14 +54,43 @@ export async function getPens() {
 }
 
 export async function getPensWithRecipes() {
-  const allPens = await getPens();
-  const allRecipes = await getRecipes();
-  const recipeMap = new Map(allRecipes.map(r => [r.id, r.name]));
+    const allPens = await getPens();
+    const allRecipes = await getRecipes();
+    const recipeMap = new Map(allRecipes.map(r => [r.id, r.name]));
 
-  return allPens.map(pen => ({
-    ...pen,
-    recipeName: recipeMap.get(pen.recipeId) || 'N/A',
-  }));
+    // Pre-calculate aggregated data
+    const feedingMap = new Map<string, string>();
+    // Sort records to find the latest one per pen
+    const sortedFeedingRecords = [...feedingRecords].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    for (const record of sortedFeedingRecords) {
+        if (!feedingMap.has(record.penId)) {
+            feedingMap.set(record.penId, record.date);
+        }
+    }
+
+    const cowStatsMap = new Map<string, { totalWeight: number, headCount: number }>();
+    for (const cow of cows) {
+        if (cow.penId) {
+            const stats = cowStatsMap.get(cow.penId) || { totalWeight: 0, headCount: 0 };
+            stats.totalWeight += cow.weight;
+            stats.headCount++;
+            cowStatsMap.set(cow.penId, stats);
+        }
+    }
+    
+    return allPens.map(pen => {
+        const stats = cowStatsMap.get(pen.id) || { totalWeight: 0, headCount: 0 };
+        const averageWeight = stats.headCount > 0 ? Math.round(stats.totalWeight / stats.headCount) : 0;
+        
+        return {
+            ...pen,
+            recipeName: recipeMap.get(pen.recipeId) || 'N/A',
+            lastFed: feedingMap.get(pen.id) || 'N/A',
+            // Ensure headCount from pen data is used if no cows are found for that pen yet
+            headCount: stats.headCount || pen.headCount, 
+            averageWeight,
+        };
+    });
 }
 
 export async function getPenById(id: string) {

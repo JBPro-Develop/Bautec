@@ -17,21 +17,16 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MoreVertical, Droplets, HeartPulse, Archive, Weight } from 'lucide-react';
-import { getFeedingRecordsForPen, getCowsByPenId } from '@/lib/data';
 import { formatDate } from '@/lib/utils';
 import type { Pen } from '@/lib/types';
 import { Separator } from '@/components/ui/separator';
 
 type PenCardProps = {
-  pen: Pen & { recipeName: string };
+  pen: Pen & { recipeName: string, lastFed: string, averageWeight: number };
 };
 
 export default async function PenCard({ pen }: PenCardProps) {
-  const feedingRecords = await getFeedingRecordsForPen(pen.id);
-  const lastFed = feedingRecords.length > 0 ? formatDate(feedingRecords[0].date) : 'N/A';
-  const cowsInPen = await getCowsByPenId(pen.id);
-  const totalWeight = cowsInPen.reduce((sum, cow) => sum + cow.weight, 0);
-  const averageWeight = pen.headCount > 0 ? Math.round(totalWeight / pen.headCount) : 0;
+  const lastFedDisplay = pen.lastFed === 'N/A' ? 'N/A' : formatDate(pen.lastFed);
 
   return (
     <Card className="flex flex-col overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300">
@@ -84,13 +79,13 @@ export default async function PenCard({ pen }: PenCardProps) {
                 <Weight className="h-4 w-4" />
                 <span>Avg. Weight:</span>
             </div>
-          <span className="font-medium text-foreground">{averageWeight.toLocaleString()} lbs</span>
+          <span className="font-medium text-foreground">{pen.averageWeight.toLocaleString()} lbs</span>
         </div>
       </CardContent>
       <CardFooter className="p-4 bg-secondary/50 flex justify-between text-sm">
         <div className="flex flex-col">
           <span className="text-muted-foreground">Last Fed</span>
-          <span className="font-semibold">{lastFed}</span>
+          <span className="font-semibold">{lastFedDisplay}</span>
         </div>
         <Badge variant={pen.status === 'Active' ? 'default' : 'destructive'} className={pen.status === 'Active' ? 'bg-green-600' : ''}>
           {pen.status}
