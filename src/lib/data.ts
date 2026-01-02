@@ -233,3 +233,27 @@ export async function addHealthRecord(data: Omit<HealthRecord, 'id'>) {
     healthRecords.unshift(newRecord);
     return newRecord;
 }
+
+export async function getTotalCows() {
+    return cows.length;
+}
+
+export async function getLatestFeeding() {
+    if (feedingRecords.length === 0) return null;
+
+    const latestRecord = [...feedingRecords].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
+    const pen = await getPenById(latestRecord.penId);
+
+    return {
+        ...latestRecord,
+        penName: pen?.name || 'Unknown Pen'
+    };
+}
+
+export async function getLatestHealthRecord() {
+    if (healthRecords.length === 0) return null;
+    
+    const latestRecord = [...healthRecords].sort((a, b) => new Date(b.treatmentDate).getTime() - new Date(a.treatmentDate).getTime())[0];
+    
+    return latestRecord;
+}

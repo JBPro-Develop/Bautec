@@ -1,28 +1,59 @@
 
-import { getPensWithRecipes } from '@/lib/data';
+import { getPensWithRecipes, getTotalCows, getLatestFeeding, getLatestHealthRecord } from '@/lib/data';
 import PenCard from './components/PenCard';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, User, Wheat, HeartPulse } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
+import StatCard from './components/StatCard';
+import { formatDate } from '@/lib/utils';
+
 
 export default async function Dashboard() {
   const pensWithRecipes = await getPensWithRecipes();
+  const totalCows = await getTotalCows();
+  const latestFeeding = await getLatestFeeding();
+  const latestHealthRecord = await getLatestHealthRecord();
+
 
   const activePens = pensWithRecipes.filter((pen) => pen.status === 'Active');
   const closedPens = pensWithRecipes.filter((pen) => pen.status === 'Closed');
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold tracking-tight">Pens Overview</h1>
-        <Button asChild>
-          <Link href="/pens/new">
-            <PlusCircle />
-            New Pen / Group
-          </Link>
-        </Button>
+      <div>
+        <div className="flex justify-between items-center mb-4">
+          <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <Button asChild>
+            <Link href="/pens/new">
+              <PlusCircle />
+              New Pen / Group
+            </Link>
+          </Button>
+        </div>
+         <div className="grid gap-4 md:grid-cols-3">
+          <StatCard 
+            title="Total Cows"
+            value={totalCows.toString()}
+            icon={User}
+            description="Across all active and unassigned."
+          />
+          <StatCard 
+            title="Latest Feeding"
+            value={latestFeeding ? latestFeeding.penName : 'N/A'}
+            icon={Wheat}
+            description={latestFeeding ? `On ${formatDate(latestFeeding.date)}` : 'No feeding records found'}
+          />
+           <StatCard 
+            title="Latest Health Event"
+            value={latestHealthRecord ? latestHealthRecord.cowTag : 'N/A'}
+            icon={HeartPulse}
+            description={latestHealthRecord ? `${latestHealthRecord.drugName} on ${formatDate(latestHealthRecord.treatmentDate)}` : 'No health records found'}
+          />
+        </div>
       </div>
+
+      <Separator />
 
       <div>
         <h2 className="text-2xl font-semibold tracking-tight mb-4">Active Pens</h2>
