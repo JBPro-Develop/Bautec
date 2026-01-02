@@ -61,7 +61,7 @@ export default function AppSidebar() {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <SidebarMenuButton asChild tooltip={item.tooltip} isActive={pathname === item.href}>
+              <SidebarMenuButton asChild tooltip={item.tooltip} isActive={pathname.startsWith(item.href) && item.href !== '/' || pathname === item.href}>
                 <Link href={item.href} onClick={handleLinkClick}>
                   <item.icon />
                   <span>{item.label}</span>
