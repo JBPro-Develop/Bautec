@@ -8,6 +8,7 @@ import {
 import AppSidebar from '@/components/AppSidebar';
 import AppHeader from '@/components/AppHeader';
 import { cn } from '@/lib/utils';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: 'BAU-TEC Farm Manager',
@@ -31,7 +32,9 @@ export default function RootLayout({
       </head>
       <body className={cn('font-body antialiased', 'bg-background')}>
         <SidebarProvider>
-          <AppSidebar />
+          <Suspense fallback={<div>Loading Sidebar...</div>}>
+            <AppSidebar />
+          </Suspense>
           <SidebarInset>
             <AppHeader />
             <main className="p-4 sm:p-6 lg:p-8">{children}</main>
