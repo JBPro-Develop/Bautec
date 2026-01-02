@@ -1,4 +1,3 @@
-
 'use client';
 
 import Link from 'next/link';
@@ -24,7 +23,7 @@ const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid, tooltip: 'Dashboard' },
     { href: '/feeding', label: 'Feeding', icon: Wheat, tooltip: 'Feeding' },
     { href: '/recipes', label: 'Recipes', icon: CookingPot, tooltip: 'Recipes' },
-    { href: '/pens/new', label: 'Pens', icon: PlusCircle, tooltip: 'New Pen' },
+    { href: '/pens/new', label: 'New Pen', icon: PlusCircle, tooltip: 'New Pen' },
     { href: '/cows', label: 'Cows', icon: User, tooltip: 'Cow Lookup' },
     { href: '/health', label: 'Health', icon: HeartPulse, tooltip: 'Health' },
 ];
@@ -43,10 +42,14 @@ export default function AppSidebar({ pens }: { pens: Pen[] }) {
   };
 
   const isActive = (href: string) => {
-    if (href === '/dashboard' && pathname === '/dashboard') return true;
-    if (href === '/pens/new' && (pathname.startsWith('/pens') || pathname.startsWith('/cows'))) return true;
-    if (href !== '/dashboard' && href !== '/pens/new' && pathname.startsWith(href)) return true;
-    return false;
+    // This logic is now more specific to avoid incorrect active states
+    if (href === '/pens/new') {
+        return pathname.startsWith('/pens/') || pathname === '/pens/new';
+    }
+    if (href === '/dashboard') {
+        return pathname === href;
+    }
+    return pathname.startsWith(href);
   };
 
   return (
