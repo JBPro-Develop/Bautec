@@ -27,7 +27,7 @@ function SubmitButton() {
 export default function FeedingTrackerForm({ pens, recipes }: { pens: Pen[], recipes: Recipe[] }) {
   const initialState = { message: null };
   const [state, formAction] = useActionState(trackFeeding, initialState);
-  const [date, setDate] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const { toast } = useToast();
 
   useEffect(() => {
@@ -83,14 +83,14 @@ export default function FeedingTrackerForm({ pens, recipes }: { pens: Pen[], rec
                     className={cn('w-full justify-start text-left font-normal', !date && 'text-muted-foreground')}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? formatDate(date) : <span>Pick a date</span>}
+                    {date ? formatDate(date) : <span>Select feeding date</span>}
                 </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
                 <Calendar 
                   mode="single" 
                   selected={date} 
-                  onSelect={(d) => d && setDate(d)} 
+                  onSelect={setDate} 
                   toDate={new Date()}
                 />
                 </PopoverContent>

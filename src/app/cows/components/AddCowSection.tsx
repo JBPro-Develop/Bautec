@@ -44,14 +44,14 @@ export default function AddCowSection({ pens }: { pens: Pen[] }) {
     <form action={formAction} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="tagId">Tag ID</Label>
-        <Input id="tagId" name="tagId" placeholder="A151" required />
+        <Input id="tagId" name="tagId" placeholder="e.g. A151" required />
         {state.errors?.tagId && <p className="text-sm text-destructive">{state.errors.tagId[0]}</p>}
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="weight">Weight (lbs)</Label>
-          <Input id="weight" name="weight" type="number" placeholder="450" required />
+          <Input id="weight" name="weight" type="number" placeholder="e.g. 450" required />
           {state.errors?.weight && <p className="text-sm text-destructive">{state.errors.weight[0]}</p>}
         </div>
         <div className="space-y-2">
@@ -64,7 +64,7 @@ export default function AddCowSection({ pens }: { pens: Pen[] }) {
                     className={cn('w-full justify-start text-left font-normal', !birthDate && 'text-muted-foreground')}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {birthDate ? formatDate(birthDate) : <span>Pick a date</span>}
+                    {birthDate ? formatDate(birthDate) : <span>Select birth date</span>}
                 </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">

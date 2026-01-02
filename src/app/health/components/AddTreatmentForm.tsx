@@ -33,7 +33,7 @@ type AddTreatmentFormProps = {
 export default function AddTreatmentForm({ cow, pens, onTreatmentAdded }: AddTreatmentFormProps) {
   const initialState = { message: null, errors: {} };
   const [state, formAction] = useActionState(createHealthRecord, initialState);
-  const [treatmentDate, setTreatmentDate] = useState<Date>(new Date());
+  const [treatmentDate, setTreatmentDate] = useState<Date | undefined>(new Date());
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -69,7 +69,7 @@ export default function AddTreatmentForm({ cow, pens, onTreatmentAdded }: AddTre
         </div>
          <div className="space-y-2">
           <Label>Treatment Date</Label>
-          <Input type="hidden" name="treatmentDate" value={treatmentDate.toISOString()} />
+          <Input type="hidden" name="treatmentDate" value={treatmentDate?.toISOString()} />
            <Popover>
               <PopoverTrigger asChild>
               <Button
@@ -77,14 +77,14 @@ export default function AddTreatmentForm({ cow, pens, onTreatmentAdded }: AddTre
                   className={cn('w-full justify-start text-left font-normal', !treatmentDate && 'text-muted-foreground')}
               >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {treatmentDate ? formatDate(treatmentDate) : <span>Pick a date</span>}
+                  {treatmentDate ? formatDate(treatmentDate) : <span>Select treatment date</span>}
               </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
               <Calendar 
                 mode="single" 
                 selected={treatmentDate} 
-                onSelect={(d) => d && setTreatmentDate(d)} 
+                onSelect={setTreatmentDate} 
                 toDate={new Date()}
               />
               </PopoverContent>

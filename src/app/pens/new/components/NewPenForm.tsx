@@ -41,12 +41,12 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="name">Pen Name / ID</Label>
-          <Input id="name" name="name" placeholder="Pen A" required />
+          <Input id="name" name="name" placeholder="e.g. Pen A" required />
           {state.errors?.name && <p className="text-sm text-destructive">{state.errors.name[0]}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="headCount">Number of Head</Label>
-          <Input id="headCount" name="headCount" type="number" placeholder="50" required />
+          <Input id="headCount" name="headCount" type="number" placeholder="e.g. 50" required />
           {state.errors?.headCount && <p className="text-sm text-destructive">{state.errors.headCount[0]}</p>}
         </div>
       </div>
@@ -62,7 +62,7 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
                 className={cn('w-full justify-start text-left font-normal', !arrivalDate && 'text-muted-foreground')}
               >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {arrivalDate ? formatDate(arrivalDate) : <span>Pick a date</span>}
+                {arrivalDate ? formatDate(arrivalDate) : <span>Select arrival date</span>}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
@@ -86,7 +86,7 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
                     className={cn('w-full justify-start text-left font-normal', !shipDate && 'text-muted-foreground')}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {shipDate ? formatDate(shipDate) : <span>Pick a date</span>}
+                    {shipDate ? formatDate(shipDate) : <span>Select ship date</span>}
                 </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
