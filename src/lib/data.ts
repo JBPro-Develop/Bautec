@@ -1,3 +1,4 @@
+
 import type { Pen, Recipe, FeedingRecord, HealthRecord, Cow, Ingredient } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { z } from 'zod';
@@ -52,6 +53,17 @@ export async function getPens() {
   return pens;
 }
 
+export async function getPensWithRecipes() {
+  const allPens = await getPens();
+  const allRecipes = await getRecipes();
+  const recipeMap = new Map(allRecipes.map(r => [r.id, r.name]));
+
+  return allPens.map(pen => ({
+    ...pen,
+    recipeName: recipeMap.get(pen.recipeId) || 'N/A',
+  }));
+}
+
 export async function getPenById(id: string) {
   return pens.find(pen => pen.id === id);
 }
@@ -79,7 +91,7 @@ export async function addPen(penData: Omit<Pen, 'id' | 'photoUrl' | 'photoHint' 
 }
 
 
-export async function addRecipe(formData: FormData) {
+export async function addRecipe(formData: FormData): Promise<Recipe> {
     const RecipeSchema = z.object({
         recipeName: z.string().min(1, 'Recipe name is required.'),
         ingredients: z.array(z.object({
@@ -140,6 +152,18 @@ export async function getCows(query?: string): Promise<Cow[]> {
     }
     return cows.filter(cow => cow.id.toLowerCase().includes(query.toLowerCase()));
 }
+
+export async function getCowsWithPenNames(query?: string) {
+    const allCows = await getCows(query);
+    const allPens = await getPens();
+    const penMap = new Map(allPens.map(p => [p.id, p.name]));
+
+    return allCows.map(cow => ({
+        ...cow,
+        penName: cow.penId ? penMap.get(cow.penId) || 'Unknown Pen' : 'Unassigned',
+    }));
+}
+
 
 export async function getCowsByPenId(penId: string): Promise<Cow[]> {
     return cows.filter(cow => cow.penId === penId);

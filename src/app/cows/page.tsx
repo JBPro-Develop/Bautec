@@ -1,3 +1,4 @@
+
 import {
   Card,
   CardContent,
@@ -5,7 +6,7 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
-import { getPens, getCows, getPenById } from '@/lib/data';
+import { getPens, getCowsWithPenNames } from '@/lib/data';
 import { Suspense } from 'react';
 import SearchSection from './components/SearchSection';
 import AddCowSection from './components/AddCowSection';
@@ -21,16 +22,7 @@ export default async function CowsPage({
 }) {
   const pens = await getPens();
   const query = searchParams?.query || '';
-  // Pass query to getCows. If query is empty, it will return all cows.
-  const cows = await getCows(query);
-
-  const cowsWithPenNames = await Promise.all(
-    cows.map(async (cow) => {
-      if (!cow.penId) return { ...cow, penName: 'Unassigned' };
-      const pen = await getPenById(cow.penId);
-      return { ...cow, penName: pen?.name || 'Unknown Pen' };
-    })
-  );
+  const cowsWithPenNames = await getCowsWithPenNames(query);
 
   return (
     <div className="grid lg:grid-cols-3 gap-8">

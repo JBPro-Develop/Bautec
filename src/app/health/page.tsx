@@ -1,4 +1,5 @@
-import { getCows, getPenById } from '@/lib/data';
+
+import { getCowsWithPenNames, getPens } from '@/lib/data';
 import {
   Card,
   CardContent,
@@ -7,19 +8,11 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import CowList from './components/CowList';
-import { getPens } from '@/lib/data';
+
 
 export default async function HealthPage() {
-  const allCows = await getCows();
+  const cowsWithPenNames = await getCowsWithPenNames();
   const pens = await getPens();
-
-  const cowsWithPenNames = await Promise.all(
-    allCows.map(async (cow) => {
-      if (!cow.penId) return { ...cow, penName: 'Unassigned' };
-      const pen = await getPenById(cow.penId);
-      return { ...cow, penName: pen?.name || 'Unknown Pen' };
-    })
-  );
 
   return (
     <div className="flex flex-col gap-8">

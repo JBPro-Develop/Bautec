@@ -1,4 +1,5 @@
-import { getPens, getRecipeById } from '@/lib/data';
+
+import { getPensWithRecipes } from '@/lib/data';
 import PenCard from './components/PenCard';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -6,14 +7,7 @@ import { PlusCircle } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 export default async function Dashboard() {
-  const pens = await getPens();
-
-  const pensWithRecipes = await Promise.all(
-    pens.map(async (pen) => {
-      const recipe = await getRecipeById(pen.recipeId);
-      return { ...pen, recipeName: recipe?.name || 'N/A' };
-    })
-  );
+  const pensWithRecipes = await getPensWithRecipes();
 
   const activePens = pensWithRecipes.filter((pen) => pen.status === 'Active');
   const closedPens = pensWithRecipes.filter((pen) => pen.status === 'Closed');
