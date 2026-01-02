@@ -16,7 +16,6 @@ import {
 } from '@/components/ui/sidebar';
 import { LayoutGrid, PlusCircle, CookingPot, Box, LifeBuoy, Settings, Spade, User, Wheat, HeartPulse } from 'lucide-react';
 import { Separator } from './ui/separator';
-import { useMemo } from 'react';
 import type { Pen } from '@/lib/types';
 
 const menuItems = [
@@ -32,9 +31,6 @@ export default function AppSidebar({ pens }: { pens: Pen[] }) {
   const pathname = usePathname();
   const { isMobile, setOpenMobile } = useSidebar();
   
-  const activePens = useMemo(() => pens.filter(p => p.status === 'Active'), [pens]);
-  const closedPens = useMemo(() => pens.filter(p => p.status === 'Closed'), [pens]);
-
   const handleLinkClick = () => {
     if (isMobile) {
       setOpenMobile(false);
@@ -43,14 +39,17 @@ export default function AppSidebar({ pens }: { pens: Pen[] }) {
 
   const isActive = (href: string) => {
     // This logic is now more specific to avoid incorrect active states
-    if (href === '/pens/new') {
-        return pathname.startsWith('/pens/') || pathname === '/pens/new';
-    }
     if (href === '/dashboard') {
         return pathname === href;
     }
+    if (href === '/pens/new') {
+        return pathname.startsWith('/pens');
+    }
     return pathname.startsWith(href);
   };
+  
+  const activePens = pens.filter(p => p.status === 'Active');
+  const closedPens = pens.filter(p => p.status === 'Closed');
 
   return (
     <Sidebar>
