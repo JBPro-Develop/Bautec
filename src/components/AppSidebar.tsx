@@ -18,7 +18,7 @@ import {
 import { LayoutGrid, PlusCircle, CookingPot, Box, LifeBuoy, Settings, Spade, User, Wheat, HeartPulse } from 'lucide-react';
 import { Separator } from './ui/separator';
 import type { Pen } from '@/lib/types';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { getPens } from '@/lib/data';
 
 const menuItems = [
@@ -47,9 +47,6 @@ export default function AppSidebar() {
       setOpenMobile(false);
     }
   };
-
-  const activePens = useMemo(() => pens.filter(p => p.status === 'Active'), [pens]);
-  const closedPens = useMemo(() => pens.filter(p => p.status === 'Closed'), [pens]);
 
   return (
     <Sidebar>
@@ -87,7 +84,7 @@ export default function AppSidebar() {
                     </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>
-            {activePens.map((pen) => (
+            {pens.filter(p => p.status === 'Active').map((pen) => (
               <SidebarMenuItem key={pen.id}>
                 <SidebarMenuButton asChild tooltip={pen.name} isActive={pathname.startsWith(`/pens/${pen.id}`)}>
                   <Link href={`/pens/${pen.id}`} onClick={handleLinkClick}>
@@ -100,13 +97,13 @@ export default function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
         
-        {closedPens.length > 0 && (
+        {pens.filter(p => p.status === 'Closed').length > 0 && (
           <SidebarGroup>
             <SidebarGroupLabel>
               <span>Closed Pens</span>
             </SidebarGroupLabel>
             <SidebarMenu className="mt-2">
-              {closedPens.map((pen) => (
+              {pens.filter(p => p.status === 'Closed').map((pen) => (
                 <SidebarMenuItem key={pen.id}>
                   <SidebarMenuButton asChild tooltip={pen.name} isActive={pathname.startsWith(`/pens/${pen.id}`)}>
                     <Link href={`/pens/${pen.id}`} onClick={handleLinkClick}>
