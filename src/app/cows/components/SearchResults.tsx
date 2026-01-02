@@ -34,7 +34,7 @@ export default function SearchResults({ cows, query }: SearchResultsProps) {
     }
     
     return (
-        <div className="mt-8">
+        <div className="mt-8 border rounded-md">
             <Table>
                 <TableHeader>
                     <TableRow>

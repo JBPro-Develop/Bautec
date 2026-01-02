@@ -11,7 +11,11 @@ import { Suspense } from 'react';
 import SearchSection from './components/SearchSection';
 import AddCowSection from './components/AddCowSection';
 import SearchResults from './components/SearchResults';
-import { Separator } from '@/components/ui/separator';
+
+async function CowList({ query }: { query: string }) {
+  const cowsWithPenNames = await getCowsWithPenNames(query);
+  return <SearchResults cows={cowsWithPenNames} query={query} />;
+}
 
 export default async function CowsPage({
   searchParams,
@@ -22,7 +26,6 @@ export default async function CowsPage({
 }) {
   const pens = await getPens();
   const query = searchParams?.query || '';
-  const cowsWithPenNames = await getCowsWithPenNames(query);
 
   return (
     <div className="grid lg:grid-cols-3 gap-8">
@@ -36,8 +39,8 @@ export default async function CowsPage({
           </CardHeader>
           <CardContent>
             <SearchSection />
-             <Suspense fallback={<p>Loading results...</p>}>
-                <SearchResults cows={cowsWithPenNames} query={query} />
+             <Suspense fallback={<p className="pt-8 text-center text-muted-foreground">Loading results...</p>}>
+                <CowList query={query} />
             </Suspense>
           </CardContent>
         </Card>
