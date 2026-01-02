@@ -38,13 +38,20 @@ export default function AppSidebar({ pens }: { pens: Pen[] }) {
   };
 
   const isActive = (href: string) => {
-    // This logic is now more specific to avoid incorrect active states
+    // Exact match for dashboard
     if (href === '/dashboard') {
         return pathname === href;
     }
+    // Special handling for /pens/new to not activate other /pens links
     if (href === '/pens/new') {
-        return pathname.startsWith('/pens');
+        return pathname === href;
     }
+    // For all other main links, check if the pathname starts with the href,
+    // but also ensure it's not the more specific '/pens/new' case.
+    if (href !== '/pens/new' && pathname.startsWith('/pens')) {
+        return false; // Don't activate other links when on a pen page
+    }
+
     return pathname.startsWith(href);
   };
   
