@@ -56,7 +56,7 @@ export default function NewRecipeForm() {
     <form ref={formRef} action={formAction} className="space-y-6">
       <div className="space-y-2">
         <Label htmlFor="recipeName">Recipe Name</Label>
-        <Input id="recipeName" name="recipeName" placeholder="e.g., High-Energy Finisher" required />
+        <Input id="recipeName" name="recipeName" placeholder="e.g., Finisher Recipe" required />
         {state.errors?.recipeName && <p className="text-sm text-destructive">{state.errors.recipeName[0]}</p>}
       </div>
 

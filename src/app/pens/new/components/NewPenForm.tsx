@@ -41,7 +41,7 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="name">Pen Name / ID</Label>
-          <Input id="name" name="name" placeholder="e.g., North Pasture" required />
+          <Input id="name" name="name" placeholder="e.g., Pen A" required />
           {state.errors?.name && <p className="text-sm text-destructive">{state.errors.name[0]}</p>}
         </div>
         <div className="space-y-2">

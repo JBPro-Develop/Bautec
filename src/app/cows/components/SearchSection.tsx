@@ -25,7 +25,7 @@ export default function SearchSection() {
     <div className="flex w-full items-center space-x-2">
       <Input
         type="text"
-        placeholder="Enter Tag ID (e.g., A101)"
+        placeholder="Search by Tag ID..."
         onChange={(e) => handleSearch(e.target.value)}
         defaultValue={searchParams.get('query')?.toString()}
       />
