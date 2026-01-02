@@ -20,6 +20,15 @@ import { Separator } from './ui/separator';
 import { useMemo } from 'react';
 import type { Pen } from '@/lib/types';
 
+const menuItems = [
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid, tooltip: 'Dashboard' },
+    { href: '/feeding', label: 'Feeding', icon: Wheat, tooltip: 'Feeding' },
+    { href: '/recipes', label: 'Recipes', icon: CookingPot, tooltip: 'Recipes' },
+    { href: '/pens/new', label: 'Pens', icon: PlusCircle, tooltip: 'New Pen' },
+    { href: '/cows', label: 'Cows', icon: User, tooltip: 'Cow Lookup' },
+    { href: '/health', label: 'Health', icon: HeartPulse, tooltip: 'Health' },
+];
+
 export default function AppSidebar({ pens }: { pens: Pen[] }) {
   const pathname = usePathname();
   const { isMobile, setOpenMobile } = useSidebar();
@@ -32,15 +41,6 @@ export default function AppSidebar({ pens }: { pens: Pen[] }) {
       setOpenMobile(false);
     }
   };
-
-  const menuItems = [
-    { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid, tooltip: 'Dashboard' },
-    { href: '/feeding', label: 'Feeding', icon: Wheat, tooltip: 'Feeding' },
-    { href: '/recipes', label: 'Recipes', icon: CookingPot, tooltip: 'Recipes' },
-    { href: '/pens/new', label: 'Pens', icon: PlusCircle, tooltip: 'New Pen' },
-    { href: '/cows', label: 'Cows', icon: User, tooltip: 'Cow Lookup' },
-    { href: '/health', label: 'Health', icon: HeartPulse, tooltip: 'Health' },
-  ];
 
   const isActive = (href: string) => {
     if (href === '/dashboard' && pathname === '/dashboard') return true;
