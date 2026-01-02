@@ -36,10 +36,10 @@ export default function AppSidebar({ pens }: { pens: Pen[] }) {
   const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: LayoutGrid, tooltip: 'Dashboard' },
     { href: '/feeding', label: 'Feeding', icon: Wheat, tooltip: 'Feeding' },
-    { href: '/health', label: 'Health', icon: HeartPulse, tooltip: 'Health' },
     { href: '/recipes', label: 'Recipes', icon: CookingPot, tooltip: 'Recipes' },
-    { href: '/pens/new', label: 'New Pen / Group', icon: PlusCircle, tooltip: 'New Pen' },
-    { href: '/cows', label: 'Cow Lookup', icon: User, tooltip: 'Cow Lookup' },
+    { href: '/pens/new', label: 'Pens', icon: PlusCircle, tooltip: 'New Pen' },
+    { href: '/cows', label: 'Cows', icon: User, tooltip: 'Cow Lookup' },
+    { href: '/health', label: 'Health', icon: HeartPulse, tooltip: 'Health' },
   ];
 
   const isActive = (href: string) => {
