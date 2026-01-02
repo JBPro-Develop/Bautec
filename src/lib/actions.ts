@@ -1,3 +1,4 @@
+
 // @ts-nocheck
 'use server';
 
@@ -28,7 +29,10 @@ export async function createPen(prevState: any, formData: FormData) {
   try {
     const newPen = await addPen(validatedFields.data);
     revalidatePath('/dashboard');
+    revalidatePath('/pens/new');
     redirect(`/pens/${newPen.id}`);
+    // This part of the code was unreachable, so it's removed.
+    // The redirect above will stop execution.
   } catch (e: any) {
     return {
         errors: {},

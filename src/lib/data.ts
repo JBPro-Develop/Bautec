@@ -183,11 +183,11 @@ export async function getCows(query?: string): Promise<Cow[]> {
 }
 
 export async function getCowsWithPenNames(query?: string) {
-    const allCows = await getCows(query);
+    const filteredCows = await getCows(query);
     const allPens = await getPens();
     const penMap = new Map(allPens.map(p => [p.id, p.name]));
 
-    return allCows.map(cow => ({
+    return filteredCows.map(cow => ({
         ...cow,
         penName: cow.penId ? penMap.get(cow.penId) || 'Unknown Pen' : 'Unassigned',
     }));
