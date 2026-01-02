@@ -44,7 +44,7 @@ export default function AddCowSection({ pens }: { pens: Pen[] }) {
     <form action={formAction} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="tagId">Tag ID</Label>
-        <Input id="tagId" name="tagId" placeholder="e.g., A151" required />
+        <Input id="tagId" name="tagId" placeholder="A151" required />
         {state.errors?.tagId && <p className="text-sm text-destructive">{state.errors.tagId[0]}</p>}
       </div>
 
@@ -68,7 +68,12 @@ export default function AddCowSection({ pens }: { pens: Pen[] }) {
                 </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                <Calendar mode="single" selected={birthDate} onSelect={setBirthDate} initialFocus />
+                <Calendar 
+                  mode="single" 
+                  selected={birthDate} 
+                  onSelect={setBirthDate} 
+                  toDate={new Date()}
+                />
                 </PopoverContent>
             </Popover>
             {state.errors?.birthDate && <p className="text-sm text-destructive">{state.errors.birthDate[0]}</p>}

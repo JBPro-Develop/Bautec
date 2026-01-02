@@ -81,7 +81,12 @@ export default function AddTreatmentForm({ cow, pens, onTreatmentAdded }: AddTre
               </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
-              <Calendar mode="single" selected={treatmentDate} onSelect={(d) => d && setTreatmentDate(d)} initialFocus />
+              <Calendar 
+                mode="single" 
+                selected={treatmentDate} 
+                onSelect={(d) => d && setTreatmentDate(d)} 
+                toDate={new Date()}
+              />
               </PopoverContent>
           </Popover>
           {state.errors?.treatmentDate && <p className="text-sm text-destructive">{state.errors.treatmentDate[0]}</p>}

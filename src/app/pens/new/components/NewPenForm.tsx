@@ -41,7 +41,7 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="name">Pen Name / ID</Label>
-          <Input id="name" name="name" placeholder="e.g., Pen A" required />
+          <Input id="name" name="name" placeholder="Pen A" required />
           {state.errors?.name && <p className="text-sm text-destructive">{state.errors.name[0]}</p>}
         </div>
         <div className="space-y-2">
@@ -66,7 +66,12 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
-              <Calendar mode="single" selected={arrivalDate} onSelect={setArrivalDate} initialFocus />
+              <Calendar 
+                mode="single" 
+                selected={arrivalDate} 
+                onSelect={setArrivalDate} 
+                toDate={new Date()}
+              />
             </PopoverContent>
           </Popover>
           {state.errors?.arrivalDate && <p className="text-sm text-destructive">{state.errors.arrivalDate[0]}</p>}
@@ -85,7 +90,12 @@ export default function NewPenForm({ recipes }: NewPenFormProps) {
                 </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                <Calendar mode="single" selected={shipDate} onSelect={setShipDate} initialFocus />
+                <Calendar 
+                  mode="single" 
+                  selected={shipDate} 
+                  onSelect={setShipDate} 
+                  fromDate={arrivalDate || new Date()}
+                />
                 </PopoverContent>
             </Popover>
             {state.errors?.expectedShipDate && <p className="text-sm text-destructive">{state.errors.expectedShipDate[0]}</p>}

@@ -71,7 +71,7 @@ export default function FeedingTrackerForm({ pens, recipes }: { pens: Pen[], rec
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
             <Label htmlFor="weight">Total Weight (lbs)</Label>
-            <Input id="weight" name="weight" type="number" placeholder="e.g., 500" required />
+            <Input id="weight" name="weight" type="number" placeholder="500" required />
         </div>
         <div className="space-y-2">
             <Label>Feeding Date</Label>
@@ -87,7 +87,12 @@ export default function FeedingTrackerForm({ pens, recipes }: { pens: Pen[], rec
                 </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0">
-                <Calendar mode="single" selected={date} onSelect={(d) => d && setDate(d)} initialFocus />
+                <Calendar 
+                  mode="single" 
+                  selected={date} 
+                  onSelect={(d) => d && setDate(d)} 
+                  toDate={new Date()}
+                />
                 </PopoverContent>
             </Popover>
         </div>
