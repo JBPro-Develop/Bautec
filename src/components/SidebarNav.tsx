@@ -81,7 +81,7 @@ export default function SidebarNav({ menuItems, activePens, closedPens, isFooter
 
   if (isFooter && menuItems) {
     return (
-       <SidebarMenu>
+       <SidebarMenu className="mt-auto">
           {renderMenuItems(menuItems)}
         </SidebarMenu>
     )

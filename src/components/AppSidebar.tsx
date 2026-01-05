@@ -44,16 +44,14 @@ export default async function AppSidebar() {
           <h1 className="font-headline text-xl font-bold">BAU-TEC Farm</h1>
         </Link>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="flex flex-col">
         <SidebarNav
           menuItems={menuItems}
           activePens={activePens}
           closedPens={closedPens}
         />
-      </SidebarContent>
-      <SidebarFooter>
         <SidebarNav menuItems={footerMenuItems} isFooter={true} />
-      </SidebarFooter>
+      </SidebarContent>
     </Sidebar>
   );
 }
