@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useParams } from 'next/navigation';
 import { notFound } from 'next/navigation';
 import { getPenById } from '@/lib/data';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -14,16 +14,18 @@ import type { Pen } from '@/lib/types';
 
 export default function PenDetailLayout({
   children,
-  params: { id },
 }: {
   children: React.ReactNode;
-  params: { id: string };
 }) {
+  const params = useParams();
+  const id = params.id as string;
   const [pen, setPen] = useState<Pen | null | undefined>(null);
   const pathname = usePathname();
 
   useEffect(() => {
-    getPenById(id).then(setPen);
+    if (id) {
+      getPenById(id).then(setPen);
+    }
   }, [id]);
 
   if (pen === null) {
