@@ -42,13 +42,12 @@ type MenuItem = {
 }
 
 type SidebarNavProps = {
-    menuItems?: MenuItem[];
+    menuItems: MenuItem[];
     activePens?: Pen[];
     closedPens?: Pen[];
-    isFooter?: boolean;
 }
 
-export default function SidebarNav({ menuItems, activePens, closedPens, isFooter }: SidebarNavProps) {
+export default function SidebarNav({ menuItems, activePens, closedPens }: SidebarNavProps) {
   const pathname = usePathname();
   const { isMobile, setOpenMobile } = useSidebar();
 
@@ -79,19 +78,13 @@ export default function SidebarNav({ menuItems, activePens, closedPens, isFooter
     });
   }
 
-  if (isFooter && menuItems) {
-    return (
-       <SidebarMenu className="mt-auto">
-          {renderMenuItems(menuItems)}
-        </SidebarMenu>
-    )
-  }
+  const hasPens = activePens || closedPens;
 
   return (
     <>
-      {menuItems && <SidebarMenu>{renderMenuItems(menuItems)}</SidebarMenu>}
+      <SidebarMenu>{renderMenuItems(menuItems)}</SidebarMenu>
       
-      {!isFooter && (
+      {hasPens && (
         <>
             <Separator className="my-4" />
             <SidebarGroup>
