@@ -51,7 +51,7 @@ export default async function AppSidebar() {
           closedPens={closedPens}
         />
       </SidebarContent>
-      <SidebarFooter className="mt-auto">
+      <SidebarFooter>
         <SidebarNav menuItems={footerMenuItems} />
       </SidebarFooter>
     </Sidebar>
