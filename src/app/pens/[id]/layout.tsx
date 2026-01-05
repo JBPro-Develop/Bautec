@@ -1,12 +1,18 @@
+'use client';
+
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { notFound } from 'next/navigation';
 import { getPenById } from '@/lib/data';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Droplets, HeartPulse, ArrowLeft, Beef, Settings, Archive } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useEffect, useState } from 'react';
+import type { Pen } from '@/lib/types';
 
-export default async function PenDetailLayout({
+
+export default function PenDetailLayout({
   children,
   params,
 }: {
@@ -14,11 +20,24 @@ export default async function PenDetailLayout({
   params: { id: string };
 }) {
   const { id } = params;
-  const pen = await getPenById(id);
+  const [pen, setPen] = useState<Pen | null | undefined>(null);
+  const pathname = usePathname();
 
-  if (!pen) {
+  useEffect(() => {
+    getPenById(id).then(setPen);
+  }, [id]);
+
+  if (pen === null) {
+    // Loading state
+    return <div>Loading pen details...</div>;
+  }
+  
+  if (pen === undefined) {
     notFound();
   }
+
+  const pathSegments = pathname.split('/');
+  const currentTab = pathSegments[3] || 'cows';
 
   return (
     <div className="flex flex-col gap-6">
@@ -40,7 +59,7 @@ export default async function PenDetailLayout({
         <p className="text-muted-foreground mt-1">{pen.headCount} heads</p>
       </div>
 
-      <Tabs defaultValue="cows" className="w-full">
+      <Tabs value={currentTab} className="w-full">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="cows" asChild>
             <Link href={`/pens/${pen.id}/cows`}>

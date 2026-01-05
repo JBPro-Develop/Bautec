@@ -30,9 +30,8 @@ export async function createPen(prevState: any, formData: FormData) {
     const newPen = await addPen(validatedFields.data);
     revalidatePath('/dashboard');
     revalidatePath('/pens/new');
-    redirect(`/pens/${newPen.id}`);
-    // This part of the code was unreachable, so it's removed.
-    // The redirect above will stop execution.
+    // Instead of redirecting, we return the new ID for client-side redirection
+    return { success: true, newPenId: newPen.id };
   } catch (e: any) {
     return {
         errors: {},
@@ -138,8 +137,8 @@ export async function createRecipe(prevState: any, formData: FormData) {
 }
 
 export async function trackFeeding(prevState: any, formData: FormData) {
-    console.log('Feeding Data:', Object.fromEntries(formData.entries()));
     revalidatePath('/feeding');
+    revalidatePath('/dashboard');
     return { message: 'Feeding recorded successfully!' };
 }
 

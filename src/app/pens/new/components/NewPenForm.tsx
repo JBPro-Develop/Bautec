@@ -1,19 +1,19 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 import { useFormStatus } from 'react-dom';
+import { useRouter } from 'next/navigation';
 import { createPen } from '@/lib/actions';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { CalendarIcon, Loader2 } from 'lucide-react';
-import { useState } from 'react';
 import { formatDate } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 import type { Recipe } from '@/lib/types';
 
 type NewPenFormProps = {
@@ -30,23 +30,34 @@ function SubmitButton() {
 }
 
 export default function NewPenForm({ recipes }: NewPenFormProps) {
-  const initialState = { errors: {} };
+  const initialState = { errors: {}, success: false, newPenId: null };
   const [state, dispatch] = useActionState(createPen, initialState);
+  const router = useRouter();
+  const { toast } = useToast();
 
   const [arrivalDate, setArrivalDate] = useState<Date>();
   const [shipDate, setShipDate] = useState<Date>();
+
+  useEffect(() => {
+    if (state.success && state.newPenId) {
+      toast({ title: 'Success!', description: 'Pen created successfully.' });
+      router.push(`/pens/${state.newPenId}`);
+    } else if (state.message) {
+      toast({ variant: 'destructive', title: 'Error', description: state.message });
+    }
+  }, [state, router, toast]);
 
   return (
     <form action={dispatch} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="name">Pen Name / ID</Label>
-          <Input id="name" name="name" placeholder="e.g. Pen A" required />
+          <Input id="name" name="name" placeholder="Pen A" required />
           {state.errors?.name && <p className="text-sm text-destructive">{state.errors.name[0]}</p>}
         </div>
         <div className="space-y-2">
           <Label htmlFor="headCount">Number of Head</Label>
-          <Input id="headCount" name="headCount" type="number" placeholder="e.g. 50" required />
+          <Input id="headCount" name="headCount" type="number" placeholder="50" required />
           {state.errors?.headCount && <p className="text-sm text-destructive">{state.errors.headCount[0]}</p>}
         </div>
       </div>

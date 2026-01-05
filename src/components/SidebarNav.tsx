@@ -88,15 +88,13 @@ export default function SidebarNav({ menuItems, activePens, closedPens, isFooter
       <SidebarMenu>
         {menuItems && menuItems.map((item) => {
           const Icon = iconMap[item.iconName];
+          const isActive = (item.href !== '/dashboard' && pathname.startsWith(item.href)) || pathname === item.href;
           return (
             <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
                 asChild
                 tooltip={item.tooltip}
-                isActive={
-                    (item.href !== '/dashboard' && pathname.startsWith(item.href)) ||
-                    pathname === item.href
-                }
+                isActive={isActive}
                 >
                 <Link href={item.href} onClick={handleLinkClick}>
                     {Icon && <Icon />}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useState, useEffect } from 'react';
+import { useActionState, useState, useEffect, useRef } from 'react';
 import { useFormStatus } from 'react-dom';
 import { trackFeeding } from '@/lib/actions';
 import { Button } from '@/components/ui/button';
@@ -29,16 +29,19 @@ export default function FeedingTrackerForm({ pens, recipes }: { pens: Pen[], rec
   const [state, formAction] = useActionState(trackFeeding, initialState);
   const [date, setDate] = useState<Date | undefined>(new Date());
   const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+
 
   useEffect(() => {
     if (state?.message) {
       toast({ title: "Success!", description: state.message });
-      // Reset form if needed
+      formRef.current?.reset();
+      setDate(new Date());
     }
   }, [state, toast]);
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form ref={formRef} action={formAction} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
             <Label htmlFor="penId">Select Pen</Label>
