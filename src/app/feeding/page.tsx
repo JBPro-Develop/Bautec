@@ -22,7 +22,7 @@ export default async function FeedingPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="max-w-2xl">
+            <div className="max-w-2xl mx-auto">
               <FeedingTrackerForm pens={pens} recipes={recipes} />
             </div>
           </CardContent>
