@@ -25,6 +25,7 @@ export default function AppHeader() {
     if (pathname.startsWith('/health')) return 'Health & Treatments';
     if (pathname.startsWith('/recipes')) return 'Recipe Management';
     if (pathname.startsWith('/cows')) return 'Cow Lookup';
+    if (pathname.startsWith('/settings')) return 'Settings';
     return 'BAU-TEC Farm';
   };
   

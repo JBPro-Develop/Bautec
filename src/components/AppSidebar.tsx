@@ -8,8 +8,6 @@ import {
   SidebarFooter,
 } from '@/components/ui/sidebar';
 import {
-  LifeBuoy,
-  Settings,
   Spade,
 } from 'lucide-react';
 import { getPens } from '@/lib/data';
@@ -27,6 +25,10 @@ const menuItems = [
   { href: '/recipes', label: 'Recipes', iconName: 'CookingPot', tooltip: 'Recipes' },
   { href: '/cows', label: 'Cows', iconName: 'User', tooltip: 'Cow Lookup' },
   { href: '/health', label: 'Health', iconName: 'HeartPulse', tooltip: 'Health' },
+];
+
+const footerMenuItems = [
+    { href: '/settings', label: 'Settings', iconName: 'Settings', tooltip: 'Settings' },
 ];
 
 export default async function AppSidebar() {
@@ -50,7 +52,7 @@ export default async function AppSidebar() {
         />
       </SidebarContent>
       <SidebarFooter>
-        <SidebarNav isFooter={true} />
+        <SidebarNav menuItems={footerMenuItems} isFooter={true} />
       </SidebarFooter>
     </Sidebar>
   );
