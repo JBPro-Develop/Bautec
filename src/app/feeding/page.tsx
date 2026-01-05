@@ -12,8 +12,8 @@ export default async function FeedingPage() {
   const feedingHistory = await getFeedingHistory();
 
   return (
-    <div className="grid lg:grid-cols-3 gap-8">
-      <div className="lg:col-span-1">
+    <div className="flex flex-col gap-8">
+      <div>
         <Card>
           <CardHeader>
             <CardTitle>Daily Feeding Tracker</CardTitle>
@@ -22,11 +22,13 @@ export default async function FeedingPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <FeedingTrackerForm pens={pens} recipes={recipes} />
+            <div className="max-w-2xl">
+              <FeedingTrackerForm pens={pens} recipes={recipes} />
+            </div>
           </CardContent>
         </Card>
       </div>
-      <div className="lg:col-span-2">
+      <div>
         <Card>
             <CardHeader>
                 <CardTitle>Feeding History</CardTitle>
