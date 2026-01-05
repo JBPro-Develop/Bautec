@@ -9,10 +9,23 @@ import { getRecipes } from '@/lib/data';
 import { Suspense } from 'react';
 import RecipeList from './components/RecipeList';
 import NewRecipeForm from './components/NewRecipeForm';
-import { Separator } from '@/components/ui/separator';
+import RecipeSearch from './components/RecipeSearch';
 
-export default async function RecipesPage() {
-  const recipes = await getRecipes();
+export default async function RecipesPage({
+  searchParams,
+}: {
+  searchParams?: {
+    query?: string;
+  };
+}) {
+  const allRecipes = await getRecipes();
+  const query = searchParams?.query || '';
+
+  const filteredRecipes = query
+    ? allRecipes.filter((recipe) =>
+        recipe.name.toLowerCase().includes(query.toLowerCase())
+      )
+    : allRecipes;
 
   return (
     <div className="grid lg:grid-cols-3 gap-8">
@@ -25,8 +38,9 @@ export default async function RecipesPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            <RecipeSearch />
             <Suspense fallback={<p>Loading recipes...</p>}>
-              <RecipeList recipes={recipes} />
+              <RecipeList recipes={filteredRecipes} query={query} />
             </Suspense>
           </CardContent>
         </Card>

@@ -6,15 +6,19 @@ import { Badge } from '@/components/ui/badge';
 
 type RecipeListProps = {
     recipes: Recipe[];
+    query: string;
 }
 
-export default function RecipeList({ recipes }: RecipeListProps) {
+export default function RecipeList({ recipes, query }: RecipeListProps) {
     if (recipes.length === 0) {
+        if (query) {
+            return <p className="text-center text-muted-foreground pt-8">No recipes found matching "{query}".</p>
+        }
         return <p className="text-center text-muted-foreground pt-8">No recipes found. Create one to get started.</p>
     }
     
     return (
-        <div className="mt-8">
+        <div className="mt-4 border rounded-md">
             <Table>
                 <TableHeader>
                     <TableRow>
