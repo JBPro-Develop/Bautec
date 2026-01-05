@@ -14,12 +14,11 @@ import type { Pen } from '@/lib/types';
 
 export default function PenDetailLayout({
   children,
-  params,
+  params: { id },
 }: {
   children: React.ReactNode;
   params: { id: string };
 }) {
-  const { id } = params;
   const [pen, setPen] = useState<Pen | null | undefined>(null);
   const pathname = usePathname();
 
